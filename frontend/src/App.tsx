@@ -75,14 +75,7 @@ const MainMenu: React.FC = () => {
           >
             <span className="menu-icon">
               {index === selectedIndex ? (
-                <div className="bowling-ball-icon">
-                  <div className="ball-body"></div>
-                  <div className="ball-holes">
-                    <div className="hole hole-1"></div>
-                    <div className="hole hole-2"></div>
-                    <div className="hole hole-3"></div>
-                  </div>
-                </div>
+                <img src="/images/BowlingBall.png" alt="bowling ball" className="bowling-ball-image" />
               ) : ' '}
             </span>
             <span className="menu-label">{item.label}</span>
