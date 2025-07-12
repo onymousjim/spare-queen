@@ -573,22 +573,44 @@ p {
   font-size: 0.8em;
 }
 
-.image-upload {
-  border: 2px solid #00ffcc;
+/* Image Upload Styles */
+.image-upload-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
   padding: 20px;
-  margin-top: 20px;
-  box-shadow: 0 0 10px #00ffcc;
+}
+
+.image-upload {
+  border: 3px solid #00ffcc;
+  padding: 30px;
+  box-shadow: 0 0 15px #00ffcc;
+  background-color: #111;
+  max-width: 500px;
+  width: 100%;
 }
 
 .scraped-data-form {
   margin-top: 20px;
 }
 
-.metrics {
-  border: 2px solid #00ffcc;
+/* Metrics Styles */
+.metrics-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
   padding: 20px;
-  margin-top: 20px;
-  box-shadow: 0 0 10px #00ffcc;
+}
+
+.metrics {
+  border: 3px solid #00ffcc;
+  padding: 30px;
+  box-shadow: 0 0 15px #00ffcc;
+  background-color: #111;
+  max-width: 500px;
+  width: 100%;
 }
 
 .player-metrics {
@@ -596,4 +618,36 @@ p {
   padding: 15px;
   margin-top: 15px;
   box-shadow: 0 0 10px #ff00ff;
+}
+
+
+.camera-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin: 20px 0;
+  align-items: center;
+}
+
+.camera-controls input[type="file"] {
+  background-color: #000;
+  color: #fff;
+  border: 2px solid #ff00ff;
+  padding: 10px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.8em;
+  box-shadow: 0 0 8px #ff00ff;
+  margin: 5px 0;
+}
+
+.camera-container {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.camera-container div {
+  margin-top: 15px;
+  display: flex;
+  gap: 15px;
+  justify-content: center;
 }

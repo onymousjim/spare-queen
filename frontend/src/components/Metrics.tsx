@@ -21,12 +21,14 @@ const Metrics: React.FC = () => {
   }, []);
 
   return (
-    <div className="metrics">
-      <button className="back-button" onClick={() => {
+    <div className="metrics-container">
+      <button className="back-button-manual" onClick={() => {
         playNavigationSound();
         navigate('/');
       }}>← Back to Menu</button>
-      <h2>Metrics</h2>
+      
+      <div className="metrics">
+        <h2>Metrics</h2>
       {error && <p>{error}</p>}
       {metrics && (
         <div>
@@ -43,6 +45,7 @@ const Metrics: React.FC = () => {
           ))}
         </div>
       )}
+      </div>
     </div>
   );
 };
