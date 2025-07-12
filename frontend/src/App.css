@@ -60,15 +60,16 @@ body {
   transform: scale(1.05);
 }
 
-.menu-indicator {
+.menu-icon {
   font-size: 1.2em;
   color: #00ffcc;
   margin-right: 15px;
   width: 20px;
   text-align: center;
+  text-shadow: 0 0 5px #00ffcc;
 }
 
-.menu-item.selected .menu-indicator {
+.menu-item.selected .menu-icon {
   color: #000;
   text-shadow: none;
 }

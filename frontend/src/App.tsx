@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
 import Login from './components/Login';
 import ManualEntry from './components/ManualEntry';
@@ -9,6 +9,7 @@ import './App.css';
 const MainMenu: React.FC = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const navigate = useNavigate();
+  const audioRef = useRef<HTMLAudioElement>(null);
 
   const menuItems = [
     { label: 'Manual Entry', path: '/manual-entry' },
@@ -16,15 +17,36 @@ const MainMenu: React.FC = () => {
     { label: 'Metrics', path: '/metrics' }
   ];
 
+  const playNavigationSound = () => {
+    // Create a simple 8-bit beep sound using Web Audio API
+    const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+    
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+    
+    oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+    oscillator.type = 'square';
+    
+    gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+    
+    oscillator.start(audioContext.currentTime);
+    oscillator.stop(audioContext.currentTime + 0.1);
+  };
+
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       switch (event.key) {
         case 'ArrowUp':
           event.preventDefault();
+          playNavigationSound();
           setSelectedIndex(prev => prev > 0 ? prev - 1 : menuItems.length - 1);
           break;
         case 'ArrowDown':
           event.preventDefault();
+          playNavigationSound();
           setSelectedIndex(prev => prev < menuItems.length - 1 ? prev + 1 : 0);
           break;
         case 'Enter':
@@ -51,8 +73,8 @@ const MainMenu: React.FC = () => {
               navigate(item.path);
             }}
           >
-            <span className="menu-indicator">
-              {index === selectedIndex ? '►' : ' '}
+            <span className="menu-icon">
+              {index === selectedIndex ? '🎮' : ' '}
             </span>
             <span className="menu-label">{item.label}</span>
           </div>
