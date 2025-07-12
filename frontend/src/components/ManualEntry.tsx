@@ -41,6 +41,12 @@ const ManualEntry: React.FC = () => {
     setPlayers(newPlayers);
   };
 
+  const handleEditPlayer = (index: number) => {
+    const playerToEdit = players[index];
+    setCurrentPlayer(playerToEdit);
+    handleRemovePlayer(index);
+  };
+
   const handleSave = async () => {
     try {
       await axios.post('http://localhost:5000/api/games', { gameName, players, date });
@@ -139,12 +145,22 @@ const ManualEntry: React.FC = () => {
             {players.map((player, index) => (
               <div key={index} className="player-summary">
                 <span>{player.name}: {player.score}</span>
-                <button 
-                  onClick={() => handleRemovePlayer(index)}
-                  className="remove-button"
-                >
-                  ✕
-                </button>
+                <div className="player-actions">
+                  <button 
+                    onClick={() => handleEditPlayer(index)}
+                    className="edit-button"
+                    title="Edit Player"
+                  >
+                    ✏️
+                  </button>
+                  <button 
+                    onClick={() => handleRemovePlayer(index)}
+                    className="remove-button"
+                    title="Remove Player"
+                  >
+                    ✕
+                  </button>
+                </div>
               </div>
             ))}
           </div>

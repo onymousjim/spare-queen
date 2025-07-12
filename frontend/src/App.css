@@ -402,7 +402,7 @@ p {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 12px;
+  padding: 10px 15px;
   background-color: #333;
   margin-bottom: 8px;
   border: 1px solid #555;
@@ -411,6 +411,29 @@ p {
 .player-summary span {
   color: #fff;
   font-size: 0.8em;
+}
+
+.player-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.edit-button {
+  background-color: #004466 !important;
+  color: #66ccff !important;
+  border: 1px solid #66ccff !important;
+  padding: 4px 8px !important;
+  font-size: 0.7em !important;
+  cursor: pointer !important;
+  margin: 0 !important;
+  min-width: auto !important;
+  border-radius: 2px !important;
+}
+
+.edit-button:hover {
+  background-color: #66ccff !important;
+  color: #000 !important;
 }
 
 .remove-button {
@@ -422,6 +445,7 @@ p {
   cursor: pointer !important;
   margin: 0 !important;
   min-width: auto !important;
+  border-radius: 2px !important;
 }
 
 .remove-button:hover {
