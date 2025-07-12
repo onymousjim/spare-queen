@@ -34,8 +34,8 @@ const MainMenu: React.FC = () => {
   const audioRef = useRef<HTMLAudioElement>(null);
 
   const menuItems = [
-    { label: 'Manual Entry', path: '/manual-entry' },
-    { label: 'Image Upload', path: '/image-upload' },
+    { label: 'Enter Scores', path: '/manual-entry' },
+    { label: 'Scores from Image', path: '/image-upload' },
     { label: 'Metrics', path: '/metrics' }
   ];
 
@@ -66,7 +66,7 @@ const MainMenu: React.FC = () => {
 
   return (
     <div className="main-menu">
-      <h2>Spare Queen</h2>
+      <h1 className="spare-queen-title">Spare Queen</h1>
       <div className="menu-items">
         {menuItems.map((item, index) => (
           <div key={item.path} className="menu-item-container">

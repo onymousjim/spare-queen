@@ -59,7 +59,7 @@ body {
   display: flex;
   align-items: center;
   position: relative;
-  min-width: 350px;
+  min-width: 550px;
 }
 
 .menu-icon-external {
@@ -77,12 +77,12 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 15px 20px;
+  padding: 20px 30px;
   border: 2px solid #ff00ff;
   background-color: #111;
   cursor: pointer;
-  font-size: 1.5em;
-  width: 400px;
+  font-size: 1.8em;
+  width: 600px;
   text-align: center;
   transition: all 0.3s ease;
   box-shadow: 0 0 10px #ff00ff;
@@ -342,6 +342,7 @@ p {
   background-color: #111;
   max-width: 500px;
   width: 100%;
+  margin-top: 40px;
 }
 
 .manual-entry h2 {
@@ -611,6 +612,7 @@ p {
   background-color: #111;
   max-width: 500px;
   width: 100%;
+  margin-top: 40px;
 }
 
 .player-metrics {
@@ -630,14 +632,51 @@ p {
 }
 
 .camera-controls input[type="file"] {
-  background-color: #000;
-  color: #fff;
+  background-color: #222;
+  color: #ff00ff;
   border: 2px solid #ff00ff;
-  padding: 10px;
+  padding: 15px 20px;
   font-family: 'Press Start 2P', cursive;
   font-size: 0.8em;
-  box-shadow: 0 0 8px #ff00ff;
+  box-shadow: 0 0 10px #ff00ff;
   margin: 5px 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 0;
+  width: 100%;
+  max-width: 300px;
+}
+
+.camera-controls input[type="file"]:hover {
+  background-color: #ff00ff;
+  color: #000;
+  box-shadow: 0 0 15px #ff00ff, 0 0 25px #ff00ff;
+  transform: scale(1.02);
+}
+
+.camera-controls input[type="file"]:focus {
+  outline: none;
+  border-color: #00ffcc;
+  box-shadow: 0 0 15px #00ffcc;
+}
+
+.camera-controls input[type="file"]::file-selector-button {
+  background-color: #ff00ff;
+  color: #000;
+  border: none;
+  padding: 8px 15px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.7em;
+  margin-right: 15px;
+  cursor: pointer;
+  box-shadow: 0 0 5px #ff00ff;
+  transition: all 0.3s ease;
+}
+
+.camera-controls input[type="file"]:hover::file-selector-button {
+  background-color: #00ffcc;
+  color: #000;
+  box-shadow: 0 0 8px #00ffcc;
 }
 
 .camera-container {
@@ -650,4 +689,30 @@ p {
   display: flex;
   gap: 15px;
   justify-content: center;
+}
+
+.spare-queen-title {
+  font-size: 6em;
+  margin-top: 100px;
+  margin-bottom: 250px;
+  color: #00ffcc;
+  text-shadow: 0 0 8px #00ffcc, 0 0 15px #00ffcc, 0 0 25px #00ffcc;
+  animation: throb 2s ease-in-out infinite alternate;
+  font-family: 'Press Start 2P', cursive;
+  text-align: center;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  overflow: visible;
+  transform: scaleY(1.5) scaleX(0.8);
+}
+
+@keyframes throb {
+  0% {
+    transform: scale(1);
+    text-shadow: 0 0 8px #00ffcc, 0 0 15px #00ffcc, 0 0 25px #00ffcc;
+  }
+  100% {
+    transform: scale(1.05);
+    text-shadow: 0 0 12px #00ffcc, 0 0 20px #00ffcc, 0 0 35px #00ffcc;
+  }
 }
