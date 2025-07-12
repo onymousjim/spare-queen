@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { playNavigationSound } from '../App';
@@ -14,6 +14,17 @@ const ImageUpload: React.FC = () => {
   const [showCamera, setShowCamera] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  // Clear error message after 3 seconds
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        setError('');
+      }, 3000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -110,17 +121,37 @@ const ImageUpload: React.FC = () => {
       }}>← Back to Menu</button>
       
       <div className="image-upload">
-        <h2>Image Upload</h2>
-      <div className="camera-controls">
-        <button onClick={() => {
-          playNavigationSound();
-          startCamera();
-        }}>Take Photo</button>
-        <input type="file" onChange={handleFileChange} />
-        {file && <button onClick={() => {
-          playNavigationSound();
-          handleUpload();
-        }}>Upload</button>}
+        <h2>Image Options</h2>
+        
+        <div className="image-options">
+          <button className="option-button take-photo-btn" onClick={() => {
+            playNavigationSound();
+            startCamera();
+          }}>
+            Take Photo
+          </button>
+          
+          <div className="upload-option">
+            <input 
+              type="file" 
+              onChange={handleFileChange} 
+              id="file-upload" 
+              style={{ display: 'none' }}
+            />
+            <label htmlFor="file-upload" className="option-button upload-photo-btn">
+              Upload Photo
+            </label>
+          </div>
+        </div>
+        
+        {file && (
+          <div className="upload-action">
+            <button className="process-button" onClick={() => {
+              playNavigationSound();
+              handleUpload();
+            }}>Process Image</button>
+          </div>
+        )}
       </div>
       
       {showCamera && (
@@ -140,7 +171,7 @@ const ImageUpload: React.FC = () => {
         </div>
       )}
       
-      {error && <p>{error}</p>}
+      {error && <p className="camera-error">{error}</p>}
       {scrapedData && (
         <div className="scraped-data-form">
           <h3>Scraped Data</h3>
@@ -177,7 +208,6 @@ const ImageUpload: React.FC = () => {
           }}>Save Game</button>
         </div>
       )}
-      </div>
     </div>
   );
 };

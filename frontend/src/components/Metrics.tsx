@@ -28,23 +28,45 @@ const Metrics: React.FC = () => {
       }}>← Back to Menu</button>
       
       <div className="metrics">
-        <h2>Metrics</h2>
-      {error && <p>{error}</p>}
-      {metrics && (
-        <div>
-          <p>Total Games Played: {metrics.totalGames}</p>
-          {metrics.players.map((player: any, index: number) => (
-            <div key={index} className="player-metrics">
-              <h3>{player.name}</h3>
-              <p>Total Wins: {player.totalWins}</p>
-              <p>Average Score: {player.averageScore % 1 === 0 ? player.averageScore : player.averageScore.toFixed(2)}</p>
-              <p>Max Score: {player.maxScore}</p>
-              <p>Min Score: {player.minScore}</p>
-              {/* Add graph here later */}
+        <h2>Sweet Stats</h2>
+        
+        {error && <div className="error-message">{error}</div>}
+        
+        {metrics && (
+          <div className="metrics-content">
+            <div className="total-games-section">
+              <h3>Total Games Played</h3>
+              <div className="total-games-count">{metrics.totalGames}</div>
             </div>
-          ))}
-        </div>
-      )}
+            
+            <div className="players-stats-section">
+              <h3>Player Statistics</h3>
+              {metrics.players.map((player: any, index: number) => (
+                <div key={index} className="player-metrics">
+                  <div className="player-name-header">{player.name}</div>
+                  <div className="stats-grid">
+                    <div className="stat-item">
+                      <span className="stat-label">Total Wins</span>
+                      <span className="stat-value wins">{player.totalWins}</span>
+                    </div>
+                    <div className="stat-item">
+                      <span className="stat-label">Average Score</span>
+                      <span className="stat-value average">{player.averageScore % 1 === 0 ? player.averageScore : player.averageScore.toFixed(2)}</span>
+                    </div>
+                    <div className="stat-item">
+                      <span className="stat-label">High Score</span>
+                      <span className="stat-value high">{player.maxScore}</span>
+                    </div>
+                    <div className="stat-item">
+                      <span className="stat-label">Low Score</span>
+                      <span className="stat-value low">{player.minScore}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
