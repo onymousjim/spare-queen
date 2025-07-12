@@ -16,6 +16,7 @@ const ManualEntry: React.FC = () => {
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
   const [players, setPlayers] = useState<Player[]>([]);
   const [currentPlayer, setCurrentPlayer] = useState<Player>({ name: '', score: '' });
+  const [scoreError, setScoreError] = useState('');
 
   const handleGameInfoNext = () => {
     if (gameName.trim()) {
@@ -24,9 +25,34 @@ const ManualEntry: React.FC = () => {
   };
 
   const handleAddPlayer = () => {
-    if (currentPlayer.name.trim() && currentPlayer.score.trim()) {
+    if (currentPlayer.name.trim() && isValidScore(currentPlayer.score)) {
       setPlayers([...players, currentPlayer]);
       setCurrentPlayer({ name: '', score: '' });
+    }
+  };
+
+  const isValidScore = (score: string): boolean => {
+    const numScore = parseInt(score, 10);
+    return !isNaN(numScore) && numScore >= 0 && numScore <= 300 && score === numScore.toString();
+  };
+
+  const handleScoreChange = (value: string) => {
+    // Only allow digits
+    const digitsOnly = value.replace(/[^0-9]/g, '');
+    
+    // Limit to 3 digits maximum (for 300)
+    const limitedDigits = digitsOnly.slice(0, 3);
+    
+    // Convert to number and ensure it's within range
+    const numValue = parseInt(limitedDigits, 10);
+    if (!isNaN(numValue) && numValue <= 300) {
+      setCurrentPlayer({...currentPlayer, score: limitedDigits});
+      setScoreError('');
+    } else if (limitedDigits === '') {
+      setCurrentPlayer({...currentPlayer, score: ''});
+      setScoreError('');
+    } else {
+      setScoreError('Score must be between 0 and 300');
     }
   };
 
@@ -125,15 +151,16 @@ const ManualEntry: React.FC = () => {
           />
           <input
             type="text"
-            placeholder="Score"
+            placeholder="Score (0-300)"
             value={currentPlayer.score}
-            onChange={(e) => setCurrentPlayer({...currentPlayer, score: e.target.value})}
+            onChange={(e) => handleScoreChange(e.target.value)}
             className="manual-input"
           />
+          {scoreError && <div className="score-error">{scoreError}</div>}
           <button 
             onClick={handleAddPlayer}
             className="manual-button"
-            disabled={!currentPlayer.name.trim() || !currentPlayer.score.trim()}
+            disabled={!currentPlayer.name.trim() || !isValidScore(currentPlayer.score)}
           >
             Add Player
           </button>
@@ -151,14 +178,14 @@ const ManualEntry: React.FC = () => {
                     className="edit-button"
                     title="Edit Player"
                   >
-                    ✏️
+                    EDIT
                   </button>
                   <button 
                     onClick={() => handleRemovePlayer(index)}
                     className="remove-button"
                     title="Remove Player"
                   >
-                    ✕
+                    DEL
                   </button>
                 </div>
               </div>

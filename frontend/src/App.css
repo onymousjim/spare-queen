@@ -385,6 +385,19 @@ p {
   font-size: 1em;
 }
 
+.score-error {
+  color: #ff0066;
+  font-size: 0.7em;
+  margin: -10px 0 15px 0;
+  text-shadow: 0 0 5px #ff0066;
+  animation: pulse 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes pulse {
+  from { opacity: 0.8; }
+  to { opacity: 1; }
+}
+
 .players-list {
   background-color: #111;
   padding: 15px;
@@ -422,35 +435,43 @@ p {
 .edit-button {
   background-color: #004466 !important;
   color: #66ccff !important;
-  border: 1px solid #66ccff !important;
-  padding: 4px 8px !important;
-  font-size: 0.7em !important;
+  border: 2px solid #66ccff !important;
+  padding: 6px 12px !important;
+  font-family: 'Press Start 2P', cursive !important;
+  font-size: 0.6em !important;
   cursor: pointer !important;
   margin: 0 !important;
   min-width: auto !important;
-  border-radius: 2px !important;
+  box-shadow: 0 0 5px #66ccff !important;
+  transition: all 0.3s ease !important;
 }
 
 .edit-button:hover {
   background-color: #66ccff !important;
   color: #000 !important;
+  box-shadow: 0 0 10px #66ccff, 0 0 15px #66ccff !important;
+  transform: scale(1.05) !important;
 }
 
 .remove-button {
   background-color: #660000 !important;
   color: #ff6666 !important;
-  border: 1px solid #ff6666 !important;
-  padding: 4px 8px !important;
-  font-size: 0.7em !important;
+  border: 2px solid #ff6666 !important;
+  padding: 6px 12px !important;
+  font-family: 'Press Start 2P', cursive !important;
+  font-size: 0.6em !important;
   cursor: pointer !important;
   margin: 0 !important;
   min-width: auto !important;
-  border-radius: 2px !important;
+  box-shadow: 0 0 5px #ff6666 !important;
+  transition: all 0.3s ease !important;
 }
 
 .remove-button:hover {
   background-color: #ff6666 !important;
   color: #000 !important;
+  box-shadow: 0 0 10px #ff6666, 0 0 15px #ff6666 !important;
+  transform: scale(1.05) !important;
 }
 
 .review-section {
