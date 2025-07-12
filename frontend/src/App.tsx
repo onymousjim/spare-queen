@@ -35,8 +35,8 @@ const MainMenu: React.FC = () => {
 
   const menuItems = [
     { label: 'Enter Scores', path: '/manual-entry' },
-    { label: 'Scores from Image', path: '/image-upload' },
-    { label: 'Metrics', path: '/metrics' }
+    { label: 'Scrape Scores', path: '/image-upload' },
+    { label: 'Sweet Stats', path: '/metrics' }
   ];
 
 

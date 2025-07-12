@@ -298,7 +298,8 @@ const ManualEntry: React.FC = () => {
             <div className="players-review">
               {players.map((player, index) => (
                 <div key={index} className="player-review">
-                  {player.name}: {player.score}
+                  <span className="player-name">{player.name}</span>
+                                    <span className="player-score">{player.score}</span>
                 </div>
               ))}
             </div>
