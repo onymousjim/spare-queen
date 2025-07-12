@@ -18,16 +18,27 @@ const ManualEntry: React.FC = () => {
   const [currentPlayer, setCurrentPlayer] = useState<Player>({ name: '', score: '' });
   const [scoreError, setScoreError] = useState('');
 
+  const getDefaultPlayerName = (playerNumber: number): string => {
+    const defaultNames = ['Lily', 'Mary', 'Jim'];
+    return playerNumber <= defaultNames.length ? defaultNames[playerNumber - 1] : '';
+  };
+
   const handleGameInfoNext = () => {
     if (gameName.trim()) {
       setCurrentStep('add-players');
+      // Set default name for first player
+      const defaultName = getDefaultPlayerName(1);
+      setCurrentPlayer({ name: defaultName, score: '' });
     }
   };
 
   const handleAddPlayer = () => {
     if (currentPlayer.name.trim() && isValidScore(currentPlayer.score)) {
       setPlayers([...players, currentPlayer]);
-      setCurrentPlayer({ name: '', score: '' });
+      // Set default name for next player
+      const nextPlayerNumber = players.length + 2;
+      const defaultName = getDefaultPlayerName(nextPlayerNumber);
+      setCurrentPlayer({ name: defaultName, score: '' });
     }
   };
 
@@ -93,6 +104,10 @@ const ManualEntry: React.FC = () => {
       setCurrentStep('game-info');
     } else if (currentStep === 'review') {
       setCurrentStep('add-players');
+      // Set appropriate default name when returning to add players
+      const nextPlayerNumber = players.length + 1;
+      const defaultName = getDefaultPlayerName(nextPlayerNumber);
+      setCurrentPlayer({ name: defaultName, score: '' });
     } else {
       navigate('/');
     }
