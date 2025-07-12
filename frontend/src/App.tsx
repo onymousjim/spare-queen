@@ -65,20 +65,21 @@ const MainMenu: React.FC = () => {
       <h2>Spare Queen</h2>
       <div className="menu-items">
         {menuItems.map((item, index) => (
-          <div
-            key={item.path}
-            className={`menu-item ${index === selectedIndex ? 'selected' : ''}`}
-            onClick={() => {
-              setSelectedIndex(index);
-              navigate(item.path);
-            }}
-          >
-            <span className="menu-icon">
+          <div key={item.path} className="menu-item-container">
+            <div className="menu-icon-external">
               {index === selectedIndex ? (
                 <img src="/images/BowlingBall.png" alt="bowling ball" className="bowling-ball-image" />
-              ) : ' '}
-            </span>
-            <span className="menu-label">{item.label}</span>
+              ) : null}
+            </div>
+            <div
+              className={`menu-item ${index === selectedIndex ? 'selected' : ''}`}
+              onClick={() => {
+                setSelectedIndex(index);
+                navigate(item.path);
+              }}
+            >
+              <span className="menu-label">{item.label}</span>
+            </div>
           </div>
         ))}
       </div>

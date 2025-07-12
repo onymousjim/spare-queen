@@ -35,15 +35,35 @@ body {
   margin-bottom: 30px;
 }
 
+.menu-item-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+  min-width: 350px;
+}
+
+.menu-icon-external {
+  position: absolute;
+  left: -60px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
 .menu-item {
   display: flex;
   align-items: center;
+  justify-content: center;
   padding: 15px 20px;
   border: 2px solid #ff00ff;
   background-color: #111;
   cursor: pointer;
   font-size: 1.5em;
-  min-width: 300px;
+  width: 400px;
+  text-align: center;
   transition: all 0.3s ease;
   box-shadow: 0 0 10px #ff00ff;
 }
@@ -60,35 +80,20 @@ body {
   transform: scale(1.05);
 }
 
-.menu-icon {
-  font-size: 1.5em;
-  color: #ffffff;
-  margin-right: 15px;
-  width: 20px;
-  text-align: center;
-  text-shadow: 0 0 8px #ffffff, 0 0 12px #00ffcc;
-  font-weight: bold;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 
 .bowling-ball-image {
-  width: 20px;
-  height: 20px;
+  width: 48px;
+  height: 48px;
   image-rendering: pixelated;
   image-rendering: -moz-crisp-edges;
   image-rendering: crisp-edges;
-  filter: drop-shadow(0 0 4px #00ffcc);
-}
-
-.menu-item.selected .menu-icon {
-  color: #000;
-  text-shadow: none;
+  filter: drop-shadow(0 0 6px #00ffcc) drop-shadow(0 0 12px #00ffcc);
+  mix-blend-mode: multiply;
+  background: transparent;
 }
 
 .menu-item.selected .bowling-ball-image {
-  filter: drop-shadow(0 0 6px #00ffcc) drop-shadow(0 0 10px #00ffcc);
+  filter: drop-shadow(0 0 8px #00ffcc) drop-shadow(0 0 16px #00ffcc) drop-shadow(0 0 24px #00ffcc);
 }
 
 .menu-label {
@@ -137,9 +142,25 @@ body {
 
 .login-container h2 {
   font-size: 3em;
-  margin-bottom: 60px;
+  margin-bottom: 30px;
   color: #00ffcc;
   text-shadow: 0 0 15px #00ffcc, 0 0 30px #00ffcc, 0 0 45px #00ffcc;
+}
+
+.login-background-image {
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.background-image {
+  max-width: 800px;
+  max-height: 600px;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  filter: drop-shadow(0 0 10px #00ffcc);
+  border: 2px solid #ff00ff;
+  box-shadow: 0 0 15px #ff00ff;
 }
 
 .login-form {

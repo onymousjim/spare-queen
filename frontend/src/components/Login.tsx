@@ -22,6 +22,9 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
   return (
     <div className="login-container">
       <h2>Spare Queen</h2>
+      <div className="login-background-image">
+        <img src="/images/SpareQueenBackground.png" alt="Spare Queen" className="background-image" />
+      </div>
       <div className="login-form">
         <div className="input-group">
           <input
