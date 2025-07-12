@@ -74,7 +74,7 @@ const MainMenu: React.FC = () => {
             }}
           >
             <span className="menu-icon">
-              {index === selectedIndex ? '🎮' : ' '}
+              {index === selectedIndex ? '●' : ' '}
             </span>
             <span className="menu-label">{item.label}</span>
           </div>
