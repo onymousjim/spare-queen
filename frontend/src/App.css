@@ -68,11 +68,73 @@ body {
   text-align: center;
   text-shadow: 0 0 8px #ffffff, 0 0 12px #00ffcc;
   font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bowling-ball-icon {
+  position: relative;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ball-body {
+  width: 16px;
+  height: 16px;
+  background-color: #222;
+  border: 2px solid #00ffcc;
+  border-radius: 0;
+  position: relative;
+  box-shadow: 0 0 8px #00ffcc, inset 0 0 4px #00ffcc;
+  background-image: 
+    linear-gradient(45deg, #333 25%, transparent 25%), 
+    linear-gradient(-45deg, #333 25%, transparent 25%), 
+    linear-gradient(45deg, transparent 75%, #333 75%), 
+    linear-gradient(-45deg, transparent 75%, #333 75%);
+  background-size: 4px 4px;
+  background-position: 0 0, 0 2px, 2px -2px, -2px 0px;
+}
+
+.ball-holes {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+}
+
+.hole {
+  width: 2px;
+  height: 2px;
+  background-color: #000;
+  border: 1px solid #666;
+}
+
+.hole-1 {
+  margin-bottom: 1px;
+}
+
+.hole-2, .hole-3 {
+  width: 1px;
+  height: 1px;
 }
 
 .menu-item.selected .menu-icon {
   color: #000;
   text-shadow: none;
+}
+
+.menu-item.selected .ball-body {
+  background-color: #444;
+  border-color: #000;
+  box-shadow: 0 0 4px #000, inset 0 0 2px #000;
 }
 
 .menu-label {
