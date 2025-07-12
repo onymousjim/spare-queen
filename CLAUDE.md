@@ -1,0 +1,5 @@
+- Never make any commits without asking me
+- And time I say "run it"  the means restart the backend and frontend of the application
+- Never restart all of nodejs because it disconnects me from this ubuntu wsl instance in vs code.  Instead, when you need to restart node applications, target the specific port running the application
+- create a script call restart-all that restarts the backend and frontend of the application and use that any time you need to restart either.
+- do not write any markdown files anywhere. 
