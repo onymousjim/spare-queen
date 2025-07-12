@@ -205,7 +205,7 @@ app.get('/api/metrics', async (req, res) => {
       return {
         name,
         totalWins: metrics.totalWins,
-        averageScore: metrics.totalScore / metrics.totalGames,
+        averageScore: parseFloat((metrics.totalScore / metrics.totalGames).toFixed(2)),
         maxScore: metrics.maxScore,
         minScore: metrics.minScore === Infinity ? 0 : metrics.minScore,
         scoresOverTime: metrics.scoresOverTime.sort((a, b) => new Date(a.date) - new Date(b.date))

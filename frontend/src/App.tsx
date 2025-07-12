@@ -72,7 +72,7 @@ const MainMenu: React.FC = () => {
           <div key={item.path} className="menu-item-container">
             <div className="menu-icon-external">
               {index === selectedIndex ? (
-                <img src="/images/BowlingBall.png" alt="bowling ball" className="bowling-ball-image" />
+                <img src="/images/BowlingBallPurple2.png" alt="bowling ball" className="bowling-ball-image" />
               ) : null}
             </div>
             <div

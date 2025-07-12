@@ -35,7 +35,7 @@ const Metrics: React.FC = () => {
             <div key={index} className="player-metrics">
               <h3>{player.name}</h3>
               <p>Total Wins: {player.totalWins}</p>
-              <p>Average Score: {player.averageScore}</p>
+              <p>Average Score: {player.averageScore % 1 === 0 ? player.averageScore : player.averageScore.toFixed(2)}</p>
               <p>Max Score: {player.maxScore}</p>
               <p>Min Score: {player.minScore}</p>
               {/* Add graph here later */}

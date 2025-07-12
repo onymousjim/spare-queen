@@ -64,7 +64,7 @@ body {
 
 .menu-icon-external {
   position: absolute;
-  left: -60px;
+  left: -80px;
   width: 40px;
   height: 40px;
   display: flex;
@@ -108,12 +108,16 @@ body {
   image-rendering: pixelated;
   image-rendering: -moz-crisp-edges;
   image-rendering: crisp-edges;
+  image-rendering: -webkit-crisp-edges;
+  image-rendering: -o-crisp-edges;
   filter: 
     drop-shadow(0 0 6px #00ffcc) 
     drop-shadow(0 0 12px #00ffcc)
     brightness(0.8)
     contrast(1.5);
   background: transparent;
+  transform: scale(1);
+  image-interpolation: nearest-neighbor;
 }
 
 .menu-item.selected .bowling-ball-image {
