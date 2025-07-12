@@ -608,6 +608,7 @@ p {
   background-color: #111;
   max-width: 500px;
   width: 100%;
+  margin-top: 40px;
 }
 
 .scraped-data-form {
