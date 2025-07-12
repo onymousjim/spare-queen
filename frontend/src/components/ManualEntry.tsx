@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -22,6 +22,42 @@ const ManualEntry: React.FC = () => {
     const defaultNames = ['Lily', 'Mary', 'Jim'];
     return playerNumber <= defaultNames.length ? defaultNames[playerNumber - 1] : '';
   };
+
+  const generateDefaultGameName = async (date: string): Promise<string> => {
+    try {
+      const response = await axios.get(`http://localhost:5000/api/games/count/${date}`);
+      return response.data.nextGameName;
+    } catch (error) {
+      console.error('Error fetching games count:', error);
+      return 'Game 1';
+    }
+  };
+
+  useEffect(() => {
+    // Set default game name when component mounts or date changes
+    const setDefaultGameName = async () => {
+      if (!gameName) {
+        const defaultName = await generateDefaultGameName(date);
+        setGameName(defaultName);
+      }
+    };
+    
+    if (currentStep === 'game-info') {
+      setDefaultGameName();
+    }
+  }, [currentStep, date]);
+
+  // Update game name when date changes
+  useEffect(() => {
+    const updateGameNameForDate = async () => {
+      const defaultName = await generateDefaultGameName(date);
+      setGameName(defaultName);
+    };
+    
+    if (currentStep === 'game-info') {
+      updateGameNameForDate();
+    }
+  }, [date, currentStep]);
 
   const handleGameInfoNext = () => {
     if (gameName.trim()) {

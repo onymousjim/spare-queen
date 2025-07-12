@@ -126,6 +126,29 @@ app.post('/api/scrape', upload.single('image'), async (req, res) => {
   }
 });
 
+app.get('/api/games/count/:date', async (req, res) => {
+  try {
+    const { date } = req.params;
+    let gamesCount = 0;
+    
+    if (db) {
+      const gamesSnapshot = await db.collection('games')
+        .where('date', '==', date)
+        .get();
+      gamesCount = gamesSnapshot.size;
+    } else {
+      // Mock database
+      const todayGames = mockGames.filter(game => game.date === date);
+      gamesCount = todayGames.length;
+    }
+    
+    res.status(200).send({ count: gamesCount, nextGameName: `Game ${gamesCount + 1}` });
+  } catch (error) {
+    console.error('Error fetching games count: ', error);
+    res.status(500).send({ message: 'Error fetching games count' });
+  }
+});
+
 app.get('/api/metrics', async (req, res) => {
   try {
     let games = [];
