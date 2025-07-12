@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { playNavigationSound } from '../App';
 
 const Metrics: React.FC = () => {
   const navigate = useNavigate();
@@ -21,7 +22,10 @@ const Metrics: React.FC = () => {
 
   return (
     <div className="metrics">
-      <button className="back-button" onClick={() => navigate('/')}>← Back to Menu</button>
+      <button className="back-button" onClick={() => {
+        playNavigationSound();
+        navigate('/');
+      }}>← Back to Menu</button>
       <h2>Metrics</h2>
       {error && <p>{error}</p>}
       {metrics && (

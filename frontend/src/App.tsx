@@ -6,6 +6,28 @@ import ImageUpload from './components/ImageUpload';
 import Metrics from './components/Metrics';
 import './App.css';
 
+// Global sound utility function
+export const playNavigationSound = () => {
+  // Create a Nintendo-style menu blip sound with frequency sweep
+  const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+  const oscillator = audioContext.createOscillator();
+  const gainNode = audioContext.createGain();
+  
+  oscillator.connect(gainNode);
+  gainNode.connect(audioContext.destination);
+  
+  // Start at higher frequency and sweep down for classic Nintendo menu sound
+  oscillator.frequency.setValueAtTime(1200, audioContext.currentTime);
+  oscillator.frequency.exponentialRampToValueAtTime(600, audioContext.currentTime + 0.05);
+  oscillator.type = 'square';
+  
+  gainNode.gain.setValueAtTime(0.15, audioContext.currentTime);
+  gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.08);
+  
+  oscillator.start(audioContext.currentTime);
+  oscillator.stop(audioContext.currentTime + 0.08);
+};
+
 const MainMenu: React.FC = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const navigate = useNavigate();
@@ -17,24 +39,6 @@ const MainMenu: React.FC = () => {
     { label: 'Metrics', path: '/metrics' }
   ];
 
-  const playNavigationSound = () => {
-    // Create a simple 8-bit beep sound using Web Audio API
-    const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-    const oscillator = audioContext.createOscillator();
-    const gainNode = audioContext.createGain();
-    
-    oscillator.connect(gainNode);
-    gainNode.connect(audioContext.destination);
-    
-    oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
-    oscillator.type = 'square';
-    
-    gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
-    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
-    
-    oscillator.start(audioContext.currentTime);
-    oscillator.stop(audioContext.currentTime + 0.1);
-  };
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -74,6 +78,7 @@ const MainMenu: React.FC = () => {
             <div
               className={`menu-item ${index === selectedIndex ? 'selected' : ''}`}
               onClick={() => {
+                playNavigationSound();
                 setSelectedIndex(index);
                 navigate(item.path);
               }}
@@ -100,6 +105,9 @@ const App: React.FC = () => {
   return (
     <Router>
       <div className="App">
+        <div className="background-overlay">
+          <img src="/images/SpareQueenBackground.png" alt="" />
+        </div>
         {loggedIn ? (
           <Routes>
             <Route path="/" element={<MainMenu />} />

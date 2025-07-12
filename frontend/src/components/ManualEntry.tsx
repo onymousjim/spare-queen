@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { playNavigationSound } from '../App';
 
 interface Player {
   name: string;
@@ -171,9 +172,15 @@ const ManualEntry: React.FC = () => {
         />
         
         <div className="button-group-manual">
-          <button onClick={handleBack} className="manual-button">← Back</button>
+          <button onClick={() => {
+            playNavigationSound();
+            handleBack();
+          }} className="manual-button">← Back</button>
           <button 
-            onClick={handleGameInfoNext} 
+            onClick={() => {
+              playNavigationSound();
+              handleGameInfoNext();
+            }} 
             className="manual-button save-button"
             disabled={!gameName.trim()}
           >
@@ -209,7 +216,10 @@ const ManualEntry: React.FC = () => {
           />
           {scoreError && <div className="score-error">{scoreError}</div>}
           <button 
-            onClick={handleAddPlayer}
+            onClick={() => {
+              playNavigationSound();
+              handleAddPlayer();
+            }}
             className="manual-button"
             disabled={!currentPlayer.name.trim() || !isValidScore(currentPlayer.score)}
           >
@@ -225,14 +235,20 @@ const ManualEntry: React.FC = () => {
                 <span>{player.name}: {player.score}</span>
                 <div className="player-actions">
                   <button 
-                    onClick={() => handleEditPlayer(index)}
+                    onClick={() => {
+                      playNavigationSound();
+                      handleEditPlayer(index);
+                    }}
                     className="edit-button"
                     title="Edit Player"
                   >
                     EDIT
                   </button>
                   <button 
-                    onClick={() => handleRemovePlayer(index)}
+                    onClick={() => {
+                      playNavigationSound();
+                      handleRemovePlayer(index);
+                    }}
                     className="remove-button"
                     title="Remove Player"
                   >
@@ -245,9 +261,15 @@ const ManualEntry: React.FC = () => {
         )}
         
         <div className="button-group-manual">
-          <button onClick={handleBack} className="manual-button">← Back</button>
+          <button onClick={() => {
+            playNavigationSound();
+            handleBack();
+          }} className="manual-button">← Back</button>
           <button 
-            onClick={handleFinishAddingPlayers}
+            onClick={() => {
+              playNavigationSound();
+              handleFinishAddingPlayers();
+            }}
             className="manual-button save-button"
             disabled={players.length === 0}
           >
@@ -284,8 +306,14 @@ const ManualEntry: React.FC = () => {
         </div>
         
         <div className="button-group-manual">
-          <button onClick={handleBack} className="manual-button">← Back</button>
-          <button onClick={handleSave} className="manual-button save-button">
+          <button onClick={() => {
+            playNavigationSound();
+            handleBack();
+          }} className="manual-button">← Back</button>
+          <button onClick={() => {
+            playNavigationSound();
+            handleSave();
+          }} className="manual-button save-button">
             Save Game
           </button>
         </div>
@@ -295,7 +323,10 @@ const ManualEntry: React.FC = () => {
 
   return (
     <div className="manual-entry-container">
-      <button className="back-button-manual" onClick={() => navigate('/')}>← Back to Menu</button>
+      <button className="back-button-manual" onClick={() => {
+        playNavigationSound();
+        navigate('/');
+      }}>← Back to Menu</button>
       
       {currentStep === 'game-info' && renderGameInfoStep()}
       {currentStep === 'add-players' && renderAddPlayersStep()}

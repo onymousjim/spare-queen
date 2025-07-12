@@ -9,6 +9,26 @@ body {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
+  position: relative;
+  min-height: 100vh;
+}
+
+.background-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.1;
+}
+
+.background-overlay img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
 }
 
 /* Main Menu Styles */
@@ -84,11 +104,15 @@ body {
 .bowling-ball-image {
   width: 48px;
   height: 48px;
+  border-radius: 50%;
   image-rendering: pixelated;
   image-rendering: -moz-crisp-edges;
   image-rendering: crisp-edges;
-  filter: drop-shadow(0 0 6px #00ffcc) drop-shadow(0 0 12px #00ffcc);
-  mix-blend-mode: multiply;
+  filter: 
+    drop-shadow(0 0 6px #00ffcc) 
+    drop-shadow(0 0 12px #00ffcc)
+    brightness(0.8)
+    contrast(1.5);
   background: transparent;
 }
 

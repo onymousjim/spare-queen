@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { playNavigationSound } from '../App';
 
 interface LoginProps {
   onLogin: () => void;
@@ -43,7 +44,10 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
           />
         </div>
         <div className="button-group">
-          <button onClick={handleLogin} className="login-button">Login</button>
+          <button onClick={() => {
+            playNavigationSound();
+            handleLogin();
+          }} className="login-button">Login</button>
         </div>
         {error && <p className="error-message">{error}</p>}
       </div>

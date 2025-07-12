@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { playNavigationSound } from '../App';
 
 const ImageUpload: React.FC = () => {
   const navigate = useNavigate();
@@ -103,12 +104,21 @@ const ImageUpload: React.FC = () => {
 
   return (
     <div className="image-upload">
-      <button className="back-button" onClick={() => navigate('/')}>← Back to Menu</button>
+      <button className="back-button" onClick={() => {
+        playNavigationSound();
+        navigate('/');
+      }}>← Back to Menu</button>
       <h2>Image Upload</h2>
       <div className="camera-controls">
-        <button onClick={startCamera}>Take Photo</button>
+        <button onClick={() => {
+          playNavigationSound();
+          startCamera();
+        }}>Take Photo</button>
         <input type="file" onChange={handleFileChange} />
-        {file && <button onClick={handleUpload}>Upload</button>}
+        {file && <button onClick={() => {
+          playNavigationSound();
+          handleUpload();
+        }}>Upload</button>}
       </div>
       
       {showCamera && (
@@ -116,8 +126,14 @@ const ImageUpload: React.FC = () => {
           <video ref={videoRef} autoPlay playsInline style={{ maxWidth: '100%' }} />
           <canvas ref={canvasRef} style={{ display: 'none' }} />
           <div>
-            <button onClick={capturePhoto}>Capture</button>
-            <button onClick={stopCamera}>Cancel</button>
+            <button onClick={() => {
+              playNavigationSound();
+              capturePhoto();
+            }}>Capture</button>
+            <button onClick={() => {
+              playNavigationSound();
+              stopCamera();
+            }}>Cancel</button>
           </div>
         </div>
       )}
@@ -153,7 +169,10 @@ const ImageUpload: React.FC = () => {
               />
             </div>
           ))}
-          <button onClick={handleSave}>Save Game</button>
+          <button onClick={() => {
+            playNavigationSound();
+            handleSave();
+          }}>Save Game</button>
         </div>
       )}
     </div>
