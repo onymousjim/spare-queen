@@ -292,14 +292,14 @@ p {
   background-color: #000 !important;
   color: #fff !important;
   border: 2px solid #ff00ff !important;
-  padding: 12px 15px !important;
+  padding: 15px 20px !important;
   font-family: 'Press Start 2P', cursive !important;
   font-size: 0.9em !important;
   width: 100% !important;
   box-sizing: border-box !important;
   box-shadow: 0 0 8px #ff00ff !important;
   transition: all 0.3s ease !important;
-  margin: 0 !important;
+  margin: 0 0 15px 0 !important;
 }
 
 .manual-input:focus {
@@ -325,13 +325,13 @@ p {
   background-color: #222 !important;
   color: #ff00ff !important;
   border: 2px solid #ff00ff !important;
-  padding: 12px 20px !important;
+  padding: 15px 25px !important;
   font-family: 'Press Start 2P', cursive !important;
   font-size: 0.8em !important;
   cursor: pointer !important;
   box-shadow: 0 0 8px #ff00ff !important;
   transition: all 0.3s ease !important;
-  margin: 0 !important;
+  margin: 10px 0 0 0 !important;
 }
 
 .manual-button:hover {
@@ -374,14 +374,14 @@ p {
 
 .current-player-section {
   background-color: #222;
-  padding: 20px;
+  padding: 25px;
   border: 2px solid #ff00ff;
   margin-bottom: 20px;
 }
 
 .current-player-section h3 {
   color: #ff00ff;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
   font-size: 1em;
 }
 
