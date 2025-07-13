@@ -34,27 +34,39 @@ const ImageUpload: React.FC = () => {
     }
   };
 
+  const [cameraStream, setCameraStream] = useState<MediaStream | null>(null);
+
   const startCamera = async () => {
     try {
+      console.log('🎥 Starting camera...');
+      
       // Check if mediaDevices is supported
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        console.error('❌ MediaDevices not supported');
         setError('Camera not supported in this browser');
         return;
       }
 
+      console.log('📱 Requesting camera access...');
+      // Try with more permissive constraints first
       const stream = await navigator.mediaDevices.getUserMedia({ 
-        video: { 
+        video: {
+          width: { ideal: 1280 },
+          height: { ideal: 720 },
           facingMode: 'environment' // Use back camera if available
         } 
       });
       
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-        setShowCamera(true);
-        setError(''); // Clear any previous errors
-      }
+      console.log('✅ Camera stream obtained:', stream);
+      
+      // Store the stream and show the modal
+      setCameraStream(stream);
+      setShowCamera(true);
+      setError(''); // Clear any previous errors
+      console.log('✅ Camera modal will be shown');
+      
     } catch (err: any) {
-      console.error('Camera error:', err);
+      console.error('❌ Camera error:', err);
       
       // Provide specific error messages
       if (err.name === 'NotAllowedError') {
@@ -71,14 +83,39 @@ const ImageUpload: React.FC = () => {
     }
   };
 
-  const stopCamera = () => {
-    if (videoRef.current && videoRef.current.srcObject) {
-      const stream = videoRef.current.srcObject as MediaStream;
-      const tracks = stream.getTracks();
-      tracks.forEach(track => track.stop());
-      videoRef.current.srcObject = null;
-      setShowCamera(false);
+  // Effect to set video source when modal opens and stream is available
+  useEffect(() => {
+    if (showCamera && cameraStream && videoRef.current) {
+      console.log('🎬 Setting video source...');
+      videoRef.current.srcObject = cameraStream;
+      
+      // Wait for video to load
+      videoRef.current.onloadedmetadata = () => {
+        console.log('📺 Video metadata loaded');
+        if (videoRef.current) {
+          videoRef.current.play();
+          console.log('▶️ Video playing');
+        }
+      };
     }
+  }, [showCamera, cameraStream]);
+
+  const stopCamera = () => {
+    // Stop the camera stream
+    if (cameraStream) {
+      const tracks = cameraStream.getTracks();
+      tracks.forEach(track => track.stop());
+      setCameraStream(null);
+      console.log('🛑 Camera stream stopped');
+    }
+    
+    // Clear video element
+    if (videoRef.current) {
+      videoRef.current.srcObject = null;
+    }
+    
+    setShowCamera(false);
+    console.log('❌ Camera modal closed');
   };
 
   const capturePhoto = () => {
@@ -185,27 +222,95 @@ const ImageUpload: React.FC = () => {
         
         {file && (
           <div className="upload-action">
-            <button 
-              className="process-button" 
-              onClick={() => {
-                playNavigationSound();
-                handleUpload();
-              }}
-              disabled={isProcessing}
-              style={{
-                opacity: isProcessing ? 0.7 : 1,
-                cursor: isProcessing ? 'not-allowed' : 'pointer'
-              }}
-            >
-              {isProcessing ? (
-                <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
-                  <span className="loading-spinner"></span>
-                  Processing...
-                </span>
-              ) : (
-                'Process Image'
+            <div className="image-preview">
+              <h3 style={{
+                color: '#00ffcc',
+                textAlign: 'center',
+                marginBottom: '15px',
+                fontSize: '1.1em',
+                textShadow: '0 0 5px #00ffcc'
+              }}>
+                {file.name === 'captured-image.jpg' ? 'Photo Captured!' : 'Image Selected'}
+              </h3>
+              <img 
+                src={URL.createObjectURL(file)} 
+                alt="Preview" 
+                style={{
+                  maxWidth: '100%',
+                  maxHeight: '300px',
+                  border: '2px solid #ff00ff',
+                  borderRadius: '8px',
+                  boxShadow: '0 0 10px rgba(255, 0, 255, 0.5)',
+                  marginBottom: '20px'
+                }}
+              />
+            </div>
+            
+            <div className="image-action-buttons">
+              <button 
+                className="process-button" 
+                onClick={() => {
+                  playNavigationSound();
+                  handleUpload();
+                }}
+                disabled={isProcessing}
+                style={{
+                  opacity: isProcessing ? 0.7 : 1,
+                  cursor: isProcessing ? 'not-allowed' : 'pointer'
+                }}
+              >
+                {isProcessing ? (
+                  <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
+                    <span className="loading-spinner"></span>
+                    Processing...
+                  </span>
+                ) : (
+                  'Process Image'
+                )}
+              </button>
+              
+              {file.name === 'captured-image.jpg' && (
+                <button 
+                  className="retake-button"
+                  onClick={() => {
+                    playNavigationSound();
+                    setFile(null);
+                    startCamera();
+                  }}
+                  disabled={isProcessing}
+                  style={{
+                    backgroundColor: '#220044',
+                    color: '#9944ff',
+                    border: '2px solid #9944ff',
+                    padding: '12px 20px',
+                    fontSize: '0.8em',
+                    fontFamily: "'Press Start 2P', cursive",
+                    boxShadow: '0 0 5px #9944ff',
+                    cursor: isProcessing ? 'not-allowed' : 'pointer',
+                    opacity: isProcessing ? 0.5 : 1,
+                    marginLeft: '10px',
+                    outline: 'none',
+                    transition: 'all 0.3s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!isProcessing) {
+                      e.currentTarget.style.backgroundColor = '#9944ff';
+                      e.currentTarget.style.color = '#000';
+                      e.currentTarget.style.boxShadow = '0 0 10px #9944ff';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isProcessing) {
+                      e.currentTarget.style.backgroundColor = '#220044';
+                      e.currentTarget.style.color = '#9944ff';
+                      e.currentTarget.style.boxShadow = '0 0 5px #9944ff';
+                    }
+                  }}
+                >
+                  📷 Take Another
+                </button>
               )}
-            </button>
+            </div>
           </div>
         )}
         
@@ -225,18 +330,54 @@ const ImageUpload: React.FC = () => {
       </div>
       
       {showCamera && (
-        <div className="camera-container">
-          <video ref={videoRef} autoPlay playsInline style={{ maxWidth: '100%' }} />
-          <canvas ref={canvasRef} style={{ display: 'none' }} />
-          <div>
-            <button onClick={() => {
-              playNavigationSound();
-              capturePhoto();
-            }}>Capture</button>
-            <button onClick={() => {
-              playNavigationSound();
-              stopCamera();
-            }}>Cancel</button>
+        <div className="camera-modal">
+          <div className="camera-container">
+            <h3 style={{
+              color: '#00ffcc',
+              textAlign: 'center',
+              marginBottom: '20px',
+              fontSize: '1.2em',
+              textShadow: '0 0 5px #00ffcc'
+            }}>Camera Preview</h3>
+            
+            <div className="video-container">
+              <video 
+                ref={videoRef} 
+                autoPlay 
+                playsInline 
+                style={{ 
+                  width: '100%',
+                  maxWidth: '600px',
+                  height: 'auto',
+                  border: '3px solid #00ffcc',
+                  borderRadius: '8px',
+                  boxShadow: '0 0 15px rgba(0, 255, 204, 0.5)'
+                }} 
+              />
+            </div>
+            
+            <canvas ref={canvasRef} style={{ display: 'none' }} />
+            
+            <div className="camera-controls">
+              <button 
+                className="camera-button snap-button"
+                onClick={() => {
+                  playNavigationSound();
+                  capturePhoto();
+                }}
+              >
+                📸 Snap Photo
+              </button>
+              <button 
+                className="camera-button back-button"
+                onClick={() => {
+                  playNavigationSound();
+                  stopCamera();
+                }}
+              >
+                ← Back
+              </button>
+            </div>
           </div>
         </div>
       )}

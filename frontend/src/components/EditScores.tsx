@@ -67,7 +67,7 @@ const EditScores: React.FC = () => {
   };
 
   const handleDeleteGame = async (gameId: string) => {
-    if (!confirm('Are you sure you want to delete this game?')) {
+    if (!window.confirm('Are you sure you want to delete this game?')) {
       return;
     }
 
