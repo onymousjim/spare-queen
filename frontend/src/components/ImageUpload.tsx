@@ -218,7 +218,7 @@ const ImageUpload: React.FC = () => {
               fontSize: '1em',
               textShadow: '0 0 5px #00ffcc'
             }}>
-              Analyzing your bowling scorecard with AI...
+              Analyzing your bowling scorecard...
             </p>
           </div>
         )}
