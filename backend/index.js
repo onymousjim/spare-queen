@@ -33,7 +33,16 @@ try {
 const app = express();
 const port = process.env.PORT || 5000;
 
-const upload = multer({ dest: 'uploads/' });
+// Use /tmp for uploads in production (Cloud Run) or uploads/ locally
+const uploadDir = process.env.NODE_ENV === 'production' ? '/tmp/uploads' : 'uploads/';
+
+// Ensure upload directory exists
+const fs = require('fs');
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
+
+const upload = multer({ dest: uploadDir });
 
 app.use(cors());
 app.use(bodyParser.json());
