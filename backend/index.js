@@ -62,8 +62,14 @@ try {
 const app = express();
 const port = process.env.PORT || 5000;
 
-// Use /tmp for uploads in production (Cloud Run) or new-uploads/ locally
-const uploadDir = process.env.NODE_ENV === 'production' ? '/tmp/uploads' : 'new-uploads/';
+// Use /tmp for uploads in Cloud Run or new-uploads/ locally
+// Cloud Run sets K_SERVICE environment variable
+const isCloudRun = process.env.K_SERVICE || process.env.NODE_ENV === 'production';
+const uploadDir = isCloudRun ? '/tmp/uploads' : 'new-uploads/';
+
+console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+console.log(`Cloud Run detected: ${!!process.env.K_SERVICE}`);
+console.log(`Upload directory: ${uploadDir}`);
 
 // Ensure upload directory exists
 const fs = require('fs');
@@ -208,6 +214,10 @@ app.post('/api/scrape', upload.single('image'), async (req, res) => {
     console.log('File size:', req.file.size);
     console.log('Upload directory:', uploadDir);
     console.log('File exists:', require('fs').existsSync(req.file.path));
+    console.log('K_SERVICE env var:', process.env.K_SERVICE);
+    console.log('NODE_ENV:', process.env.NODE_ENV);
+    console.log('Current working directory:', process.cwd());
+    console.log('Temp directory contents:', require('fs').readdirSync('/tmp').length + ' items');
     
     // Process with Gemini Vision API only
     const result = await processImageWithGemini(req.file.path);
