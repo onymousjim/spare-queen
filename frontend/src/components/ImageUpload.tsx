@@ -14,6 +14,7 @@ const ImageUpload: React.FC = () => {
   const [showCamera, setShowCamera] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [focusedInput, setFocusedInput] = useState<string | null>(null);
 
   // Clear error message after 3 seconds
   useEffect(() => {
@@ -34,13 +35,38 @@ const ImageUpload: React.FC = () => {
 
   const startCamera = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      // Check if mediaDevices is supported
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        setError('Camera not supported in this browser');
+        return;
+      }
+
+      const stream = await navigator.mediaDevices.getUserMedia({ 
+        video: { 
+          facingMode: 'environment' // Use back camera if available
+        } 
+      });
+      
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
         setShowCamera(true);
+        setError(''); // Clear any previous errors
       }
-    } catch (err) {
-      setError('Error accessing camera');
+    } catch (err: any) {
+      console.error('Camera error:', err);
+      
+      // Provide specific error messages
+      if (err.name === 'NotAllowedError') {
+        setError('Camera permission denied. Please allow camera access and try again.');
+      } else if (err.name === 'NotFoundError') {
+        setError('No camera found on this device.');
+      } else if (err.name === 'NotSupportedError') {
+        setError('Camera not supported in this browser.');
+      } else if (err.name === 'SecurityError') {
+        setError('Camera access blocked. Make sure you are using HTTPS.');
+      } else {
+        setError(`Camera error: ${err.message || 'Unknown error'}`);
+      }
     }
   };
 
@@ -85,6 +111,7 @@ const ImageUpload: React.FC = () => {
           'Content-Type': 'multipart/form-data',
         },
       });
+      console.log('API Response:', res.data);
       setScrapedData(res.data);
       setPlayers(res.data.players);
       setError('');
@@ -175,6 +202,41 @@ const ImageUpload: React.FC = () => {
       {scrapedData && (
         <div className="scraped-data-form">
           <h3>Scraped Data</h3>
+          
+          {/* Display the extracted data clearly */}
+          {scrapedData && scrapedData.scrapedData && (
+            <div className="extracted-data-display">
+              <h4>Extracted Information:</h4>
+              <div className="data-columns">
+                <div className="names-column">
+                  <h5>Player Names (Left Column):</h5>
+                  {scrapedData.scrapedData.playerNames && scrapedData.scrapedData.playerNames.map((name: string, index: number) => (
+                    <div key={index} className="extracted-item">
+                      {index + 1}. {name || '(Not detected)'}
+                    </div>
+                  ))}
+                </div>
+                <div className="scores-column">
+                  <h5>Scores (Right Column):</h5>
+                  {scrapedData.scrapedData.playerScores && scrapedData.scrapedData.playerScores.map((score: string, index: number) => (
+                    <div key={index} className="extracted-item">
+                      {index + 1}. {score || '(Not detected)'}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+          
+          {/* Debug: Show raw scraped data */}
+          {scrapedData && (
+            <div style={{background: '#222', padding: '10px', margin: '10px 0', fontSize: '12px'}}>
+              <strong>Debug - Raw Response:</strong>
+              <pre>{JSON.stringify(scrapedData, null, 2)}</pre>
+            </div>
+          )}
+          
+          <h4>Edit Game Data:</h4>
           <input
             type="text"
             placeholder="Game Name"
@@ -187,19 +249,80 @@ const ImageUpload: React.FC = () => {
             onChange={(e) => setDate(e.target.value)}
           />
           {players.map((player, index) => (
-            <div key={index} className="player-inputs">
-              <input
-                type="text"
-                placeholder="Player Name"
-                value={player.name}
-                onChange={(e) => handlePlayerChange(index, 'name', e.target.value)}
-              />
-              <input
-                type="text"
-                placeholder="Score"
-                value={player.score}
-                onChange={(e) => handlePlayerChange(index, 'score', e.target.value)}
-              />
+            <div key={index} className="player-row-layout" style={{
+              display: 'flex',
+              alignItems: 'flex-end',
+              gap: '15px',
+              marginBottom: '15px',
+              padding: '15px',
+              background: 'rgba(0, 0, 0, 0.2)',
+              borderRadius: '8px',
+              border: '1px solid rgba(0, 255, 204, 0.3)'
+            }}>
+              <div style={{ display: 'flex', flexDirection: 'column', flex: 2, gap: '5px' }}>
+                <label htmlFor={`player-name-${index}`} style={{
+                  color: '#00ffcc',
+                  fontSize: '0.9em',
+                  fontWeight: 'bold',
+                  marginBottom: '5px',
+                  textShadow: '0 0 3px #00ffcc'
+                }}>Player {index + 1} Name:</label>
+                <input
+                  id={`player-name-${index}`}
+                  type="text"
+                  placeholder="Enter player name"
+                  value={player.name}
+                  onChange={(e) => handlePlayerChange(index, 'name', e.target.value)}
+                  onFocus={() => setFocusedInput(`name-${index}`)}
+                  onBlur={() => setFocusedInput(null)}
+                  style={{
+                    backgroundColor: '#222',
+                    color: '#00ffcc',
+                    border: '2px solid #ff00ff',
+                    padding: '12px 15px',
+                    fontSize: '1em',
+                    minHeight: '44px',
+                    boxSizing: 'border-box',
+                    fontFamily: "'Press Start 2P', cursive",
+                    boxShadow: focusedInput === `name-${index}` ? '0 0 10px #ff00ff, 0 0 15px #ff00ff' : '0 0 5px #ff00ff',
+                    transition: 'all 0.3s ease',
+                    width: 'auto',
+                    outline: 'none'
+                  }}
+                />
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', flex: 1, gap: '5px' }}>
+                <label htmlFor={`player-score-${index}`} style={{
+                  color: '#00ffcc',
+                  fontSize: '0.9em',
+                  fontWeight: 'bold',
+                  marginBottom: '5px',
+                  textShadow: '0 0 3px #00ffcc'
+                }}>Score:</label>
+                <input
+                  id={`player-score-${index}`}
+                  type="text"
+                  placeholder="Enter score"
+                  value={player.score}
+                  onChange={(e) => handlePlayerChange(index, 'score', e.target.value)}
+                  onFocus={() => setFocusedInput(`score-${index}`)}
+                  onBlur={() => setFocusedInput(null)}
+                  style={{
+                    backgroundColor: '#222',
+                    color: '#00ffcc',
+                    border: '2px solid #ff00ff',
+                    padding: '12px 15px',
+                    fontSize: '1em',
+                    minHeight: '44px',
+                    boxSizing: 'border-box',
+                    fontFamily: "'Press Start 2P', cursive",
+                    boxShadow: focusedInput === `score-${index}` ? '0 0 10px #ff00ff, 0 0 15px #ff00ff' : '0 0 5px #ff00ff',
+                    transition: 'all 0.3s ease',
+                    width: 'auto',
+                    outline: 'none'
+                  }}
+                />
+              </div>
             </div>
           ))}
           <button onClick={() => {

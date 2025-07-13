@@ -3,13 +3,13 @@ const { GoogleGenerativeAI } = require('@google/generative-ai');
 const fs = require('fs');
 const path = require('path');
 
-// Initialize Gemini client
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-
 async function processImageWithGemini(imagePath) {
   try {
-    // Get the Gemini Flash model (cheaper and faster)
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    // Initialize Gemini client inside the function to ensure env vars are loaded
+    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+    
+    // Get the Gemini 2.5 Flash Lite Preview model
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash-lite-preview-06-17" });
     
     // Read and encode image
     const imageBuffer = fs.readFileSync(imagePath);
