@@ -2,10 +2,70 @@
 > backend@1.0.0 start
 > node index.js
 
-[dotenv@17.2.0] injecting env (0) from ../.env (tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild)
+[dotenv@17.2.0] injecting env (0) from ../.env (tip: ⚙️  override existing env vars with { override: true })
 Initializing Firebase with environment variables...
 Firebase initialized successfully with environment variables
 Environment: development
 Cloud Run detected: false
 Upload directory: new-uploads/
 Server running on port 5000
+Processing image with Gemini Vision API...
+GEMINI_API_KEY available: true
+File path: new-uploads/6f8fb2be49ac07f55eec3424c4c3ebda
+File size: 2831137
+Upload directory: new-uploads/
+File exists: true
+K_SERVICE env var: undefined
+NODE_ENV: undefined
+Current working directory: /home/jimalien/src/spare-queen/backend
+Temp directory contents: 150 items
+Starting Gemini processing for: new-uploads/6f8fb2be49ac07f55eec3424c4c3ebda
+Gemini client initialized
+Model loaded: gemini-1.5-flash
+Image encoded, size: 2831137 bytes
+Calling Gemini API...
+API call completed, processing response...
+Gemini response: ```json
+{
+  "players": [
+    {"name": "LILY", "score": "111"},
+    {"name": "MARY", "score": "114"},
+    {"name": "JAMIE", "score": "114"}
+  ]
+}
+```
+
+Gemini processing successful: {
+  playerNames: [ 'LILY', 'MARY', 'JAMIE' ],
+  playerScores: [ '111', '114', '114' ]
+}
+Processing image with Gemini Vision API...
+GEMINI_API_KEY available: true
+File path: new-uploads/a0deb805e8eca7919ffa6060640e563c
+File size: 2702502
+Upload directory: new-uploads/
+File exists: true
+K_SERVICE env var: undefined
+NODE_ENV: undefined
+Current working directory: /home/jimalien/src/spare-queen/backend
+Temp directory contents: 150 items
+Starting Gemini processing for: new-uploads/a0deb805e8eca7919ffa6060640e563c
+Gemini client initialized
+Model loaded: gemini-1.5-flash
+Image encoded, size: 2702502 bytes
+Calling Gemini API...
+API call completed, processing response...
+Gemini response: ```json
+{
+  "players": [
+    {"name": "LILY", "score": "65"},
+    {"name": "MARY", "score": "121"},
+    {"name": "JAMIE", "score": "63"}
+  ]
+}
+```
+
+Gemini processing successful: {
+  playerNames: [ 'LILY', 'MARY', 'JAMIE' ],
+  playerScores: [ '65', '121', '63' ]
+}

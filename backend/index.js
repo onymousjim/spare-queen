@@ -426,8 +426,41 @@ app.get('/api/metrics', async (req, res) => {
   }
 });
 
+app.get('/api/players/:playerName/games', async (req, res) => {
+  try {
+    const { playerName } = req.params;
+    let allGames = [];
+
+    if (db) {
+      const snapshot = await db.collection('games').orderBy('date', 'asc').get();
+      allGames = snapshot.docs.map(doc => doc.data());
+    } else {
+      // Mock database
+      allGames = mockGames.slice().sort((a, b) => new Date(a.date) - new Date(b.date));
+    }
+
+    const playerGames = allGames
+      .map(game => {
+        const playerInGame = game.players.find(p => p.name === playerName);
+        if (playerInGame) {
+          return {
+            date: game.date,
+            score: parseInt(playerInGame.score, 10)
+          };
+        }
+        return null;
+      })
+      .filter(game => game !== null);
+
+    res.status(200).send(playerGames);
+  } catch (error) {
+    console.error(`Error fetching games for player ${req.params.playerName}: `, error);
+    res.status(500).send({ message: 'Error fetching player game history' });
+  }
+});
+
 // Handle React Router routes - serve index.html for specific routes
-app.get(['/manual-entry', '/image-upload', '/edit-game', '/edit-scores', '/metrics'], (req, res) => {
+app.get(['/manual-entry', '/image-upload', '/edit-game', '/edit-scores', '/metrics', '/player/:playerName'], (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 

@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { playNavigationSound } from '../App';
 
+import { normalizePlayerName } from '../utils';
+
 interface Player {
   name: string;
   score: string;
@@ -71,7 +73,11 @@ const ManualEntry: React.FC = () => {
 
   const handleAddPlayer = () => {
     if (currentPlayer.name.trim() && isValidScore(currentPlayer.score)) {
-      setPlayers([...players, currentPlayer]);
+      const normalizedPlayer = {
+        ...currentPlayer,
+        name: normalizePlayerName(currentPlayer.name),
+      };
+      setPlayers([...players, normalizedPlayer]);
       // Set default name for next player
       const nextPlayerNumber = players.length + 2;
       const defaultName = getDefaultPlayerName(nextPlayerNumber);
@@ -150,6 +156,7 @@ const ManualEntry: React.FC = () => {
     }
   };
 
+
   const renderGameInfoStep = () => (
     <div className="manual-entry">
       <h2>Game Information</h2>
@@ -204,6 +211,7 @@ const ManualEntry: React.FC = () => {
             placeholder="Player Name"
             value={currentPlayer.name}
             onChange={(e) => setCurrentPlayer({...currentPlayer, name: e.target.value})}
+            onBlur={(e) => setCurrentPlayer({...currentPlayer, name: normalizePlayerName(e.target.value)})}
             className="manual-input"
             autoFocus
           />

@@ -3,6 +3,8 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { playNavigationSound } from '../App';
 
+import { normalizePlayerName } from '../utils';
+
 interface Player {
   name: string;
   score: string;
@@ -20,7 +22,7 @@ const EditGame: React.FC = () => {
   const state = location.state as LocationState;
 
   const [gameName, setGameName] = useState('');
-  const [players, setPlayers] = useState<Player[]>(state?.players || []);
+  const [players, setPlayers] = useState<Player[]>(state?.players.map(p => ({...p, name: normalizePlayerName(p.name)})) || []);
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
   const [focusedInput, setFocusedInput] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
@@ -52,7 +54,11 @@ const EditGame: React.FC = () => {
 
   const handlePlayerChange = (index: number, field: 'name' | 'score', value: string) => {
     const newPlayers = [...players];
-    newPlayers[index][field] = value;
+    if (field === 'name') {
+      newPlayers[index][field] = normalizePlayerName(value);
+    } else {
+      newPlayers[index][field] = value;
+    }
     setPlayers(newPlayers);
   };
 
@@ -92,6 +98,7 @@ const EditGame: React.FC = () => {
   if (!state?.players) {
     return null; // Will redirect via useEffect
   }
+
 
   return (
     <div className="edit-game-container">

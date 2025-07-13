@@ -6,6 +6,7 @@ import ImageUpload from './components/ImageUpload';
 import EditGame from './components/EditGame';
 import EditScores from './components/EditScores';
 import Metrics from './components/Metrics';
+import PlayerStats from './components/PlayerStats';
 import './App.css';
 
 // Global sound utility function
@@ -119,6 +120,7 @@ const App: React.FC = () => {
             <Route path="/edit-game" element={<EditGame />} />
             <Route path="/edit-scores" element={<EditScores />} />
             <Route path="/metrics" element={<Metrics />} />
+            <Route path="/player/:playerName" element={<PlayerStats />} />
           </Routes>
         ) : (
           <Routes>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { playNavigationSound } from '../App';
 
@@ -14,7 +14,8 @@ const Metrics: React.FC = () => {
       try {
         setLoading(true);
         const res = await axios.get('/api/metrics');
-        setMetrics(res.data);
+        const sortedPlayers = res.data.players.sort((a: any, b: any) => parseFloat(b.averageScore) - parseFloat(a.averageScore));
+        setMetrics({ ...res.data, players: sortedPlayers });
       } catch (err) {
         setError('Error fetching metrics');
       } finally {
@@ -50,31 +51,25 @@ const Metrics: React.FC = () => {
               <div className="total-games-count">{metrics.totalGames}</div>
             </div>
             
-            <div className="players-stats-section">
-              <h3>Player Statistics</h3>
-              {metrics.players.map((player: any, index: number) => (
-                <div key={index} className="player-metrics">
-                  <div className="player-name-header">{player.name}</div>
-                  <div className="stats-grid">
-                    <div className="stat-item">
-                      <span className="stat-label">Total Wins</span>
-                      <span className="stat-value wins">{player.totalWins}</span>
+            <div className="players-ranking-section">
+              <h3>Player Rankings</h3>
+              <p style={{ fontSize: '0.8em', color: '#aaa', marginTop: '-15px', marginBottom: '20px' }}>
+                (click player for details)
+              </p>
+              <div className="ranking-list">
+                {metrics.players.map((player: any, index: number) => (
+                  <Link to={`/player/${player.name}`} state={{ player }} key={index} className="player-rank-item" style={{ textDecoration: 'none', color: 'inherit' }}>
+                    <div className="player-rank">{index + 1}</div>
+                    <div className="player-rank-name">{player.name}</div>
+                    <div className="player-rank-avg">
+                      Avg: {player.averageScore % 1 === 0 ? player.averageScore : player.averageScore.toFixed(2)}
                     </div>
-                    <div className="stat-item">
-                      <span className="stat-label">Average Score</span>
-                      <span className="stat-value average">{player.averageScore % 1 === 0 ? player.averageScore : player.averageScore.toFixed(2)}</span>
+                    <div className="player-rank-wins">
+                      Wins: {player.totalWins}
                     </div>
-                    <div className="stat-item">
-                      <span className="stat-label">High Score</span>
-                      <span className="stat-value high">{player.maxScore}</span>
-                    </div>
-                    <div className="stat-item">
-                      <span className="stat-label">Low Score</span>
-                      <span className="stat-value low">{player.minScore}</span>
-                    </div>
-                  </div>
-                </div>
-              ))}
+                  </Link>
+                ))}
+              </div>
             </div>
           </div>
         )}

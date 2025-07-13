@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { playNavigationSound } from '../App';
 
+import { normalizePlayerName } from '../utils';
+
 interface Player {
   name: string;
   score: string;
@@ -87,7 +89,11 @@ const EditScores: React.FC = () => {
     if (!editingGame) return;
     
     const newPlayers = [...editingGame.players];
-    newPlayers[index][field] = value;
+    if (field === 'name') {
+      newPlayers[index][field] = normalizePlayerName(value);
+    } else {
+      newPlayers[index][field] = value;
+    }
     setEditingGame({ ...editingGame, players: newPlayers });
   };
 
@@ -106,6 +112,7 @@ const EditScores: React.FC = () => {
     const newPlayers = editingGame.players.filter((_, i) => i !== index);
     setEditingGame({ ...editingGame, players: newPlayers });
   };
+
 
   if (loading) {
     return (

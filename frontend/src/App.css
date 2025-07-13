@@ -1537,14 +1537,14 @@ p {
   100% { text-shadow: 0 0 25px #ff00ff, 0 0 35px #ff00ff; }
 }
 
-.players-stats-section {
+.players-ranking-section {
   background-color: #1a1a1a;
   padding: 25px;
   border: 2px solid #444;
   box-shadow: inset 0 0 15px rgba(0, 255, 204, 0.1);
 }
 
-.players-stats-section h3 {
+.players-ranking-section h3 {
   color: #00ffcc;
   font-size: 1.3em;
   margin-bottom: 20px;
@@ -1554,29 +1554,50 @@ p {
   padding-bottom: 10px;
 }
 
-.player-metrics {
-  background-color: #111;
-  border: 3px solid #ff00ff;
-  margin-bottom: 20px;
-  padding: 20px;
-  box-shadow: 0 0 15px rgba(255, 0, 255, 0.4);
+.ranking-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.player-rank-item {
+  display: flex;
+  align-items: center;
+  background-color: #222;
+  padding: 15px;
+  border: 2px solid #ff00ff;
+  box-shadow: 0 0 8px rgba(255, 0, 255, 0.4);
   transition: all 0.3s ease;
 }
 
-.player-metrics:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 0 25px rgba(255, 0, 255, 0.6);
+.player-rank-item:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 15px rgba(255, 0, 255, 0.6);
 }
 
-.player-name-header {
-  color: #00ffcc;
-  font-size: 1.4em;
+.player-rank {
+  font-size: 1.5em;
   font-weight: bold;
-  text-align: center;
-  margin-bottom: 20px;
-  text-shadow: 0 0 10px #00ffcc;
-  padding: 10px;
-  border-bottom: 2px solid #00ffcc;
+  color: #00ffcc;
+  margin-right: 20px;
+  text-shadow: 0 0 5px #00ffcc;
+}
+
+.player-rank-name {
+  flex-grow: 1;
+  font-size: 1.2em;
+  color: #fff;
+}
+
+.player-rank-avg {
+  font-size: 1.1em;
+  color: #ffaa00;
+  margin-right: 20px;
+}
+
+.player-rank-wins {
+  font-size: 1.1em;
+  color: #00ff88;
 }
 
 .stats-grid {
@@ -1634,6 +1655,109 @@ p {
   color: #4488ff;
   text-shadow: 0 0 8px #4488ff;
 }
+
+@media (max-width: 600px) {
+  .player-rank-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .player-rank {
+    align-self: center;
+    margin-bottom: 10px;
+  }
+
+  .player-rank-name {
+    align-self: center;
+    font-size: 1.4em;
+  }
+
+  .player-rank-avg,
+  .player-rank-wins {
+    align-self: stretch;
+    text-align: center;
+    padding: 5px;
+    border-radius: 5px;
+  }
+
+  .player-rank-avg {
+    background-color: rgba(255, 170, 0, 0.1);
+  }
+
+  .player-rank-wins {
+    background-color: rgba(0, 255, 136, 0.1);
+  }
+}
+
+/* Score Scatter Plot Styles */
+.graph-container {
+  width: 100%;
+  margin-top: 40px;
+  padding: 20px;
+  background-color: #1a1a1a;
+  border: 2px solid #444;
+  box-shadow: inset 0 0 15px rgba(0, 255, 204, 0.1);
+}
+
+.graph-title {
+  color: #00ffcc;
+  font-size: 1.3em;
+  margin-bottom: 25px;
+  text-align: center;
+  text-shadow: 0 0 8px #00ffcc;
+  border-bottom: 2px solid #00ffcc;
+  padding-bottom: 10px;
+}
+
+.scatterplot-svg {
+  width: 100%;
+  height: auto;
+  font-family: 'Press Start 2P', cursive;
+  shape-rendering: crispEdges; /* For that pixelated look */
+}
+
+.axis-line {
+  stroke: #444;
+  stroke-width: 2;
+}
+
+.grid-line {
+  stroke: #333;
+  stroke-width: 1;
+  stroke-dasharray: 4;
+}
+
+.axis-label, .point-label {
+  fill: #aaa;
+  font-size: 10px;
+  text-anchor: middle;
+}
+
+.data-line {
+  fill: none;
+  stroke: #ff00ff;
+  stroke-width: 2;
+  stroke-linejoin: bevel; /* Sharp corners */
+}
+
+.data-point {
+  fill: #00ffcc;
+  stroke: #000;
+  stroke-width: 2;
+}
+
+.point-label {
+  fill: #00ffcc;
+  font-size: 12px;
+  text-anchor: middle;
+  font-weight: bold;
+  text-shadow: 0 0 5px #00ffcc;
+}
+
+
+
+
 
 @media (max-width: 600px) {
   .stats-grid {
