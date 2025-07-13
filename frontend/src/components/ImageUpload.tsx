@@ -222,7 +222,7 @@ const ImageUpload: React.FC = () => {
         
         {file && (
           <div className="upload-action">
-            <div className="image-action-buttons">
+            <div className="process-button-container">
               <button 
                 className="process-button" 
                 onClick={() => {
@@ -232,7 +232,8 @@ const ImageUpload: React.FC = () => {
                 disabled={isProcessing}
                 style={{
                   opacity: isProcessing ? 0.7 : 1,
-                  cursor: isProcessing ? 'not-allowed' : 'pointer'
+                  cursor: isProcessing ? 'not-allowed' : 'pointer',
+                  width: '100%'
                 }}
               >
                 {isProcessing ? (
@@ -269,6 +270,50 @@ const ImageUpload: React.FC = () => {
                 }}
               />
             </div>
+            
+            {file.name === 'captured-image.jpg' && (
+              <div className="take-another-container">
+                <button 
+                  className="retake-button"
+                  onClick={() => {
+                    playNavigationSound();
+                    setFile(null);
+                    startCamera();
+                  }}
+                  disabled={isProcessing}
+                  style={{
+                    backgroundColor: '#220044',
+                    color: '#9944ff',
+                    border: '2px solid #9944ff',
+                    padding: '12px 20px',
+                    fontSize: '0.8em',
+                    fontFamily: "'Press Start 2P', cursive",
+                    boxShadow: '0 0 5px #9944ff',
+                    cursor: isProcessing ? 'not-allowed' : 'pointer',
+                    opacity: isProcessing ? 0.5 : 1,
+                    outline: 'none',
+                    transition: 'all 0.3s ease',
+                    width: '100%'
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!isProcessing) {
+                      e.currentTarget.style.backgroundColor = '#9944ff';
+                      e.currentTarget.style.color = '#000';
+                      e.currentTarget.style.boxShadow = '0 0 10px #9944ff';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isProcessing) {
+                      e.currentTarget.style.backgroundColor = '#220044';
+                      e.currentTarget.style.color = '#9944ff';
+                      e.currentTarget.style.boxShadow = '0 0 5px #9944ff';
+                    }
+                  }}
+                >
+                  📷 Take Another
+                </button>
+              </div>
+            )}
           </div>
         )}
         

@@ -1441,18 +1441,17 @@ p {
   box-shadow: 0 0 15px #ff6666;
 }
 
-/* Image Action Buttons */
-.image-action-buttons {
-  display: flex;
-  gap: 15px;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
+/* Process Button Container */
+.process-button-container {
   margin-bottom: 20px;
 }
 
 .image-preview {
   text-align: center;
+  margin: 20px 0;
+}
+
+.take-another-container {
   margin-top: 20px;
 }
 
