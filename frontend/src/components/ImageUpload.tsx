@@ -110,7 +110,7 @@ const ImageUpload: React.FC = () => {
     formData.append('image', file);
 
     try {
-      const res = await axios.post('http://localhost:5000/api/scrape', formData, {
+      const res = await axios.post('/api/scrape', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -140,7 +140,7 @@ const ImageUpload: React.FC = () => {
 
   const handleSave = async () => {
     try {
-      await axios.post('http://localhost:5000/api/games', { gameName, players, date });
+      await axios.post('/api/games', { gameName, players, date });
       // Reset form
       setFile(null);
       setScrapedData(null);

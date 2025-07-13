@@ -11,7 +11,7 @@ const Metrics: React.FC = () => {
   useEffect(() => {
     const fetchMetrics = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/metrics');
+        const res = await axios.get('/api/metrics');
         setMetrics(res.data);
       } catch (err) {
         setError('Error fetching metrics');

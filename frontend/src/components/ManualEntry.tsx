@@ -26,7 +26,7 @@ const ManualEntry: React.FC = () => {
 
   const generateDefaultGameName = async (date: string): Promise<string> => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/games/count/${date}`);
+      const response = await axios.get(`/api/games/count/${date}`);
       return response.data.nextGameName;
     } catch (error) {
       console.error('Error fetching games count:', error);
@@ -123,7 +123,7 @@ const ManualEntry: React.FC = () => {
 
   const handleSave = async () => {
     try {
-      await axios.post('http://localhost:5000/api/games', { gameName, players, date });
+      await axios.post('/api/games', { gameName, players, date });
       // Reset form and go back to menu
       setGameName('');
       setPlayers([]);

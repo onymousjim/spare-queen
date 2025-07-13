@@ -14,7 +14,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
 
   const handleLogin = async () => {
     try {
-      await axios.post('http://localhost:5000/api/login', { username, password });
+      await axios.post('/api/login', { username, password });
       onLogin();
     } catch (err) {
       setError('Invalid credentials');
