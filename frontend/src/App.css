@@ -627,6 +627,20 @@ p {
   padding: 20px;
 }
 
+/* Edit Scores Styles */
+.edit-scores-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.edit-scores-content {
+  width: 100%;
+  max-width: 800px;
+}
+
 .image-upload {
   border: 3px solid #00ffcc;
   padding: 30px;

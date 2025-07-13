@@ -12,3 +12,6 @@ Dockerfile
 
 # Ignore uploads directory in backend
 backend/uploads
+
+# Ignore Firebase credentials
+backend/serviceAccountKey.json

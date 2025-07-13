@@ -51,5 +51,6 @@
     "jest-environment-node": "^29.7.0",
     "jest-puppeteer": "^9.0.2",
     "puppeteer": "^21.11.0"
-  }
+  },
+  "proxy": "http://localhost:5000"
 }

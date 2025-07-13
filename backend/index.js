@@ -33,8 +33,8 @@ try {
 const app = express();
 const port = process.env.PORT || 5000;
 
-// Use /tmp for uploads in production (Cloud Run) or uploads/ locally
-const uploadDir = process.env.NODE_ENV === 'production' ? '/tmp/uploads' : 'uploads/';
+// Use /tmp for uploads in production (Cloud Run) or new-uploads/ locally
+const uploadDir = process.env.NODE_ENV === 'production' ? '/tmp/uploads' : 'new-uploads/';
 
 // Ensure upload directory exists
 const fs = require('fs');
@@ -61,6 +61,49 @@ app.get('/health', (req, res) => {
     timestamp: new Date().toISOString(),
     uptime: process.uptime()
   });
+});
+
+// Test endpoint for Gemini API
+app.get('/api/test-gemini', async (req, res) => {
+  try {
+    const { GoogleGenerativeAI } = require('@google/generative-ai');
+    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    
+    const result = await model.generateContent("Say hello");
+    const response = await result.response;
+    const text = response.text();
+    
+    res.status(200).json({ 
+      success: true, 
+      response: text,
+      apiKeyExists: !!process.env.GEMINI_API_KEY 
+    });
+  } catch (error) {
+    res.status(500).json({ 
+      success: false, 
+      error: error.message,
+      apiKeyExists: !!process.env.GEMINI_API_KEY 
+    });
+  }
+});
+
+// Test endpoint for image processing
+app.get('/api/test-image', async (req, res) => {
+  try {
+    const testImagePath = '../uploads/20250705_201000-COLLAGE.jpg';
+    const result = await processImageWithGemini(testImagePath);
+    res.status(200).json({ 
+      success: true, 
+      result: result
+    });
+  } catch (error) {
+    res.status(500).json({ 
+      success: false, 
+      error: error.message,
+      stack: error.stack
+    });
+  }
 });
 
 // Placeholder for authentication
@@ -132,6 +175,10 @@ app.post('/api/scrape', upload.single('image'), async (req, res) => {
 
     console.log('Processing image with Gemini Vision API...');
     console.log('GEMINI_API_KEY available:', !!process.env.GEMINI_API_KEY);
+    console.log('File path:', req.file.path);
+    console.log('File size:', req.file.size);
+    console.log('Upload directory:', uploadDir);
+    console.log('File exists:', require('fs').existsSync(req.file.path));
     
     // Process with Gemini Vision API only
     const result = await processImageWithGemini(req.file.path);
@@ -165,7 +212,9 @@ app.post('/api/scrape', upload.single('image'), async (req, res) => {
 
   } catch (error) {
     console.error('Error scraping image: ', error);
-    res.status(500).send({ message: 'Error scraping image' });
+    console.error('Error stack:', error.stack);
+    console.error('Error message:', error.message);
+    res.status(500).send({ message: 'Error scraping image', error: error.message });
   }
 });
 
@@ -209,6 +258,62 @@ app.get('/api/games', async (req, res) => {
   } catch (error) {
     console.error('Error fetching games: ', error);
     res.status(500).send({ message: 'Error fetching games' });
+  }
+});
+
+// API endpoint to update a game
+app.put('/api/games/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { gameName, players, date } = req.body;
+    
+    const gameData = {
+      gameName,
+      date,
+      players,
+      updatedAt: new Date().toISOString()
+    };
+    
+    if (db) {
+      await db.collection('games').doc(id).update(gameData);
+      res.status(200).send({ message: 'Game updated successfully', id });
+    } else {
+      // Mock database
+      const gameIndex = mockGames.findIndex(game => game.id.toString() === id);
+      if (gameIndex !== -1) {
+        mockGames[gameIndex] = { ...mockGames[gameIndex], ...gameData };
+        res.status(200).send({ message: 'Game updated successfully', id });
+      } else {
+        res.status(404).send({ message: 'Game not found' });
+      }
+    }
+  } catch (error) {
+    console.error('Error updating game: ', error);
+    res.status(500).send({ message: 'Error updating game' });
+  }
+});
+
+// API endpoint to delete a game
+app.delete('/api/games/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    if (db) {
+      await db.collection('games').doc(id).delete();
+      res.status(200).send({ message: 'Game deleted successfully' });
+    } else {
+      // Mock database
+      const gameIndex = mockGames.findIndex(game => game.id.toString() === id);
+      if (gameIndex !== -1) {
+        mockGames.splice(gameIndex, 1);
+        res.status(200).send({ message: 'Game deleted successfully' });
+      } else {
+        res.status(404).send({ message: 'Game not found' });
+      }
+    }
+  } catch (error) {
+    console.error('Error deleting game: ', error);
+    res.status(500).send({ message: 'Error deleting game' });
   }
 });
 
@@ -283,7 +388,7 @@ app.get('/api/metrics', async (req, res) => {
 });
 
 // Handle React Router routes - serve index.html for specific routes
-app.get(['/manual-entry', '/image-upload', '/edit-game', '/metrics'], (req, res) => {
+app.get(['/manual-entry', '/image-upload', '/edit-game', '/edit-scores', '/metrics'], (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 

@@ -5,15 +5,25 @@ const path = require('path');
 
 async function processImageWithGemini(imagePath) {
   try {
+    console.log('Starting Gemini processing for:', imagePath);
+    
+    // Check if file exists
+    if (!fs.existsSync(imagePath)) {
+      throw new Error(`Image file not found: ${imagePath}`);
+    }
+    
     // Initialize Gemini client inside the function to ensure env vars are loaded
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+    console.log('Gemini client initialized');
     
-    // Get the Gemini 2.5 Flash Lite Preview model
-    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash-lite-preview-06-17" });
+    // Get the Gemini model (try stable version first)
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    console.log('Model loaded: gemini-1.5-flash');
     
     // Read and encode image
     const imageBuffer = fs.readFileSync(imagePath);
     const base64Image = imageBuffer.toString('base64');
+    console.log('Image encoded, size:', imageBuffer.length, 'bytes');
     
     // Get file extension for media type
     const ext = path.extname(imagePath).toLowerCase();
@@ -46,7 +56,10 @@ Rules:
       }
     ];
 
+    console.log('Calling Gemini API...');
     const result = await model.generateContent([prompt, ...imageParts]);
+    console.log('API call completed, processing response...');
+    
     const response = await result.response;
     const responseText = response.text();
     

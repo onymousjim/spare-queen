@@ -4,6 +4,7 @@ import Login from './components/Login';
 import ManualEntry from './components/ManualEntry';
 import ImageUpload from './components/ImageUpload';
 import EditGame from './components/EditGame';
+import EditScores from './components/EditScores';
 import Metrics from './components/Metrics';
 import './App.css';
 
@@ -37,6 +38,7 @@ const MainMenu: React.FC = () => {
   const menuItems = [
     { label: 'Enter Scores', path: '/manual-entry' },
     { label: 'Scrape Scores', path: '/image-upload' },
+    { label: 'Edit Scores', path: '/edit-scores' },
     { label: 'Sweet Stats', path: '/metrics' }
   ];
 
@@ -115,6 +117,7 @@ const App: React.FC = () => {
             <Route path="/manual-entry" element={<ManualEntry />} />
             <Route path="/image-upload" element={<ImageUpload />} />
             <Route path="/edit-game" element={<EditGame />} />
+            <Route path="/edit-scores" element={<EditScores />} />
             <Route path="/metrics" element={<Metrics />} />
           </Routes>
         ) : (
