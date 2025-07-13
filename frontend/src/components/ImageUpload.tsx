@@ -222,30 +222,6 @@ const ImageUpload: React.FC = () => {
         
         {file && (
           <div className="upload-action">
-            <div className="image-preview">
-              <h3 style={{
-                color: '#00ffcc',
-                textAlign: 'center',
-                marginBottom: '15px',
-                fontSize: '1.1em',
-                textShadow: '0 0 5px #00ffcc'
-              }}>
-                {file.name === 'captured-image.jpg' ? 'Photo Captured!' : 'Image Selected'}
-              </h3>
-              <img 
-                src={URL.createObjectURL(file)} 
-                alt="Preview" 
-                style={{
-                  maxWidth: '100%',
-                  maxHeight: '300px',
-                  border: '2px solid #ff00ff',
-                  borderRadius: '8px',
-                  boxShadow: '0 0 10px rgba(255, 0, 255, 0.5)',
-                  marginBottom: '20px'
-                }}
-              />
-            </div>
-            
             <div className="image-action-buttons">
               <button 
                 className="process-button" 
@@ -268,48 +244,30 @@ const ImageUpload: React.FC = () => {
                   'Process Image'
                 )}
               </button>
-              
-              {file.name === 'captured-image.jpg' && (
-                <button 
-                  className="retake-button"
-                  onClick={() => {
-                    playNavigationSound();
-                    setFile(null);
-                    startCamera();
-                  }}
-                  disabled={isProcessing}
-                  style={{
-                    backgroundColor: '#220044',
-                    color: '#9944ff',
-                    border: '2px solid #9944ff',
-                    padding: '12px 20px',
-                    fontSize: '0.8em',
-                    fontFamily: "'Press Start 2P', cursive",
-                    boxShadow: '0 0 5px #9944ff',
-                    cursor: isProcessing ? 'not-allowed' : 'pointer',
-                    opacity: isProcessing ? 0.5 : 1,
-                    marginLeft: '10px',
-                    outline: 'none',
-                    transition: 'all 0.3s ease'
-                  }}
-                  onMouseEnter={(e) => {
-                    if (!isProcessing) {
-                      e.currentTarget.style.backgroundColor = '#9944ff';
-                      e.currentTarget.style.color = '#000';
-                      e.currentTarget.style.boxShadow = '0 0 10px #9944ff';
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (!isProcessing) {
-                      e.currentTarget.style.backgroundColor = '#220044';
-                      e.currentTarget.style.color = '#9944ff';
-                      e.currentTarget.style.boxShadow = '0 0 5px #9944ff';
-                    }
-                  }}
-                >
-                  📷 Take Another
-                </button>
-              )}
+            </div>
+            
+            <div className="image-preview">
+              <h3 style={{
+                color: '#00ffcc',
+                textAlign: 'center',
+                marginBottom: '15px',
+                fontSize: '1.1em',
+                textShadow: '0 0 5px #00ffcc'
+              }}>
+                {file.name === 'captured-image.jpg' ? 'Photo Captured!' : 'Image Selected'}
+              </h3>
+              <img 
+                src={URL.createObjectURL(file)} 
+                alt="Preview" 
+                style={{
+                  maxWidth: '100%',
+                  maxHeight: '300px',
+                  border: '2px solid #ff00ff',
+                  borderRadius: '8px',
+                  boxShadow: '0 0 10px rgba(255, 0, 255, 0.5)',
+                  marginBottom: '20px'
+                }}
+              />
             </div>
           </div>
         )}
