@@ -191,7 +191,7 @@ const ImageUpload: React.FC = () => {
 
   return (
     <div className="image-upload-container">
-      <button className="back-button-manual" onClick={() => {
+      <button className="back-button" onClick={() => {
         playNavigationSound();
         navigate('/');
       }}>← Back to Menu</button>
@@ -348,7 +348,7 @@ const ImageUpload: React.FC = () => {
                 📸 Snap Photo
               </button>
               <button 
-                className="camera-button back-button"
+                className="back-button"
                 onClick={() => {
                   playNavigationSound();
                   stopCamera();

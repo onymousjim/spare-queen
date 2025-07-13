@@ -324,7 +324,7 @@ const ManualEntry: React.FC = () => {
 
   return (
     <div className="manual-entry-container">
-      <button className="back-button-manual" onClick={() => {
+      <button className="back-button" onClick={() => {
         playNavigationSound();
         navigate('/');
       }}>← Back to Menu</button>

@@ -138,6 +138,9 @@ body {
 
 /* Back Button */
 .back-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
   background-color: #222;
   color: #00ffcc;
   border: 2px solid #00ffcc;
@@ -147,11 +150,8 @@ body {
   cursor: pointer;
   box-shadow: 0 0 5px #00ffcc;
   transition: all 0.3s ease;
-  margin-bottom: 20px;
+  z-index: 1000;
 }
-
-
-
 
 .back-button:hover {
   background-color: #00ffcc;
@@ -333,42 +333,17 @@ p {
   color: #ff00ff;
 }
 
-/* Manual Entry Styles */
-.manual-entry-container {
+.manual-entry-container,
+.image-upload-container,
+.edit-scores-container,
+.metrics-container,
+.edit-game-container {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
-  padding: 20px;
-}
-
-.back-button-manual {
-  align-self: flex-start;
-  background-color: #222;
-  color: #00ffcc;
-  border: 2px solid #00ffcc;
-  padding: 10px 15px;
-  font-family: 'Press Start 2P', cursive;
-  font-size: 0.8em;
-  cursor: pointer;
-  box-shadow: 0 0 5px #00ffcc;
-  transition: all 0.3s ease;
-  margin-bottom: 20px;
-}
-
-.back-button-manual:hover {
-  background-color: #00ffcc;
-  color: #000;
-  box-shadow: 0 0 10px #00ffcc, 0 0 15px #00ffcc;
-}
-
-.manual-entry {
-  border: 3px solid #00ffcc;
-  padding: 30px;
-  box-shadow: 0 0 15px #00ffcc;
-  background-color: #111;
-  max-width: 500px;
-  width: 100%;
+  padding: 80px 20px 20px 20px; /* Added extra top padding */
 }
 
 .manual-entry h2 {
@@ -1261,6 +1236,15 @@ p {
 }
 
 /* Metrics Styles */
+.edit-game-container,
+.edit-scores-container,
+.image-upload-container,
+.manual-entry-container,
+.metrics-container {
+  position: relative;
+  padding-top: 60px; /* Add padding to avoid content overlapping with the back button */
+}
+
 .metrics-container {
   display: flex;
   flex-direction: column;
@@ -1428,18 +1412,7 @@ p {
   box-shadow: 0 0 15px #00ff44;
 }
 
-.camera-button.back-button {
-  background-color: #440022;
-  border-color: #ff6666;
-  color: #ff6666;
-  box-shadow: 0 0 8px #ff6666;
-}
 
-.camera-button.back-button:hover {
-  background-color: #ff6666;
-  color: #000;
-  box-shadow: 0 0 15px #ff6666;
-}
 
 .image-preview-box {
   text-align: center;
@@ -1815,5 +1788,15 @@ p {
   text-align: center;
   margin-top: 15px;
   animation: pulse 2s ease-in-out infinite alternate;
+}
+
+@media (min-width: 769px) {
+  .manual-entry-container,
+  .image-upload-container,
+  .edit-scores-container,
+  .metrics-container,
+  .edit-game-container {
+    padding-top: 100px;
+  }
 }
 

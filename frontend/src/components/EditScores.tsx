@@ -120,7 +120,7 @@ const EditScores: React.FC = () => {
   if (editingGame) {
     return (
       <div className="edit-scores-container">
-        <button className="back-button-manual" onClick={() => {
+        <button className="back-button" onClick={() => {
           playNavigationSound();
           setEditingGame(null);
         }}>← Back to Game List</button>
@@ -336,7 +336,7 @@ const EditScores: React.FC = () => {
 
   return (
     <div className="edit-scores-container">
-      <button className="back-button-manual" onClick={() => {
+      <button className="back-button" onClick={() => {
         playNavigationSound();
         navigate('/');
       }}>← Back to Menu</button>

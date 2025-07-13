@@ -26,7 +26,7 @@ const Metrics: React.FC = () => {
 
   return (
     <div className="metrics-container">
-      <button className="back-button-manual" onClick={() => {
+      <button className="back-button" onClick={() => {
         playNavigationSound();
         navigate('/');
       }}>← Back to Menu</button>

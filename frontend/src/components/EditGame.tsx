@@ -95,7 +95,7 @@ const EditGame: React.FC = () => {
 
   return (
     <div className="edit-game-container">
-      <button className="back-button-manual" onClick={() => {
+      <button className="back-button" onClick={() => {
         playNavigationSound();
         navigate('/image-upload');
       }}>← Back to Upload</button>

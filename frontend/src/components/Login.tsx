@@ -10,7 +10,6 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = async () => {
     try {
@@ -37,7 +36,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
             className="login-input"
           />
           <input
-            type={showPassword ? "text" : "password"}
+            type="password"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -45,14 +44,6 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
           />
         </div>
         <div className="button-group">
-          <button 
-            type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            className="login-button"
-            style={{ marginRight: '20px' }}
-          >
-            View Password
-          </button>
           <button onClick={() => {
             playNavigationSound();
             handleLogin();
