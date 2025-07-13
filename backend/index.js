@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const admin = require('firebase-admin');
 const multer = require('multer');
+const path = require('path');
 const { processImageWithGemini } = require('./gemini-vision-example');
 
 // Load environment variables
@@ -37,8 +38,20 @@ const upload = multer({ dest: 'uploads/' });
 app.use(cors());
 app.use(bodyParser.json());
 
+// Serve static files from the React app build directory
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.get('/', (req, res) => {
-  res.send('Spare Queen Backend is running!');
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// Health check endpoint for Docker
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    status: 'healthy',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime()
+  });
 });
 
 // Placeholder for authentication
@@ -258,6 +271,11 @@ app.get('/api/metrics', async (req, res) => {
     console.error('Error fetching metrics: ', error);
     res.status(500).send({ message: 'Error fetching metrics' });
   }
+});
+
+// Handle React Router routes - serve index.html for specific routes
+app.get(['/manual-entry', '/image-upload', '/edit-game', '/metrics'], (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.listen(port, () => {
