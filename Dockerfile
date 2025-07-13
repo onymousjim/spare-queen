@@ -1,5 +1,14 @@
-# Unified container using only Node.js (no nginx)
-FROM node:18-alpine
+# Stage 1: Build frontend
+FROM node:20-alpine AS frontend-builder
+WORKDIR /app
+COPY frontend/package*.json ./
+ENV PUPPETEER_SKIP_DOWNLOAD=true
+RUN npm ci --no-audit --no-fund && npm cache clean --force
+COPY frontend/ ./
+RUN npm run build
+
+# Stage 2: Production container
+FROM node:20-alpine
 
 # Set working directory
 WORKDIR /usr/src/app
@@ -8,23 +17,15 @@ WORKDIR /usr/src/app
 RUN addgroup -g 1001 -S nodejs && \
     adduser -S appuser -u 1001 -G nodejs
 
-# Build frontend first
-WORKDIR /tmp/frontend
-COPY frontend/package*.json ./
-RUN npm ci && npm cache clean --force
-COPY frontend/ ./
-RUN npm run build
-
 # Setup backend
-WORKDIR /usr/src/app
 COPY backend/package*.json ./
 RUN npm ci --only=production && npm cache clean --force
 
 # Copy backend source
 COPY backend/ ./
 
-# Copy built frontend to public directory
-COPY --from=0 /tmp/frontend/build ./public
+# Copy built frontend from previous stage
+COPY --from=frontend-builder /app/build ./public
 
 # Create uploads directory with proper permissions
 RUN mkdir -p uploads && chown -R appuser:nodejs uploads
