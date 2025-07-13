@@ -15,6 +15,7 @@ const ImageUpload: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [focusedInput, setFocusedInput] = useState<string | null>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   // Clear error message after 3 seconds
   useEffect(() => {
@@ -102,6 +103,9 @@ const ImageUpload: React.FC = () => {
   const handleUpload = async () => {
     if (!file) return;
 
+    setIsProcessing(true);
+    setError('');
+
     const formData = new FormData();
     formData.append('image', file);
 
@@ -112,11 +116,19 @@ const ImageUpload: React.FC = () => {
         },
       });
       console.log('API Response:', res.data);
-      setScrapedData(res.data);
-      setPlayers(res.data.players);
-      setError('');
+      
+      // Navigate to edit page with the processed data
+      const imageUrl = URL.createObjectURL(file);
+      navigate('/edit-game', { 
+        state: { 
+          players: res.data.players,
+          scrapedData: res.data.scrapedData,
+          imageUrl: imageUrl
+        } 
+      });
     } catch (err) {
       setError('Error scraping image');
+      setIsProcessing(false);
     }
   };
 
@@ -173,10 +185,41 @@ const ImageUpload: React.FC = () => {
         
         {file && (
           <div className="upload-action">
-            <button className="process-button" onClick={() => {
-              playNavigationSound();
-              handleUpload();
-            }}>Process Image</button>
+            <button 
+              className="process-button" 
+              onClick={() => {
+                playNavigationSound();
+                handleUpload();
+              }}
+              disabled={isProcessing}
+              style={{
+                opacity: isProcessing ? 0.7 : 1,
+                cursor: isProcessing ? 'not-allowed' : 'pointer'
+              }}
+            >
+              {isProcessing ? (
+                <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
+                  <span className="loading-spinner"></span>
+                  Processing...
+                </span>
+              ) : (
+                'Process Image'
+              )}
+            </button>
+          </div>
+        )}
+        
+        {isProcessing && (
+          <div className="processing-message">
+            <p style={{ 
+              textAlign: 'center', 
+              color: '#00ffcc', 
+              marginTop: '15px',
+              fontSize: '1em',
+              textShadow: '0 0 5px #00ffcc'
+            }}>
+              Analyzing your bowling scorecard with AI...
+            </p>
           </div>
         )}
       </div>
@@ -201,68 +244,73 @@ const ImageUpload: React.FC = () => {
       {error && <p className="camera-error">{error}</p>}
       {scrapedData && (
         <div className="scraped-data-form">
-          <h3>Scraped Data</h3>
+          <h3 style={{ 
+            textAlign: 'center', 
+            marginBottom: '20px',
+            fontSize: window.innerWidth <= 480 ? '1.3em' : '1.5em'
+          }}>Edit Game Data</h3>
           
-          {/* Display the extracted data clearly */}
-          {scrapedData && scrapedData.scrapedData && (
-            <div className="extracted-data-display">
-              <h4>Extracted Information:</h4>
-              <div className="data-columns">
-                <div className="names-column">
-                  <h5>Player Names (Left Column):</h5>
-                  {scrapedData.scrapedData.playerNames && scrapedData.scrapedData.playerNames.map((name: string, index: number) => (
-                    <div key={index} className="extracted-item">
-                      {index + 1}. {name || '(Not detected)'}
-                    </div>
-                  ))}
-                </div>
-                <div className="scores-column">
-                  <h5>Scores (Right Column):</h5>
-                  {scrapedData.scrapedData.playerScores && scrapedData.scrapedData.playerScores.map((score: string, index: number) => (
-                    <div key={index} className="extracted-item">
-                      {index + 1}. {score || '(Not detected)'}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-          
-          {/* Debug: Show raw scraped data */}
-          {scrapedData && (
-            <div style={{background: '#222', padding: '10px', margin: '10px 0', fontSize: '12px'}}>
-              <strong>Debug - Raw Response:</strong>
-              <pre>{JSON.stringify(scrapedData, null, 2)}</pre>
-            </div>
-          )}
-          
-          <h4>Edit Game Data:</h4>
-          <input
-            type="text"
-            placeholder="Game Name"
-            value={gameName}
-            onChange={(e) => setGameName(e.target.value)}
-          />
-          <input
-            type="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-          />
+          <div style={{ marginBottom: '15px' }}>
+            <label style={{
+              display: 'block',
+              color: '#00ffcc',
+              fontSize: '0.9em',
+              fontWeight: 'bold',
+              marginBottom: '5px',
+              textShadow: '0 0 3px #00ffcc'
+            }}>Game Name:</label>
+            <input
+              type="text"
+              placeholder="Game Name"
+              value={gameName}
+              onChange={(e) => setGameName(e.target.value)}
+              style={{
+                width: '100%',
+                boxSizing: 'border-box'
+              }}
+            />
+          </div>
+
+          <div style={{ marginBottom: '20px' }}>
+            <label style={{
+              display: 'block',
+              color: '#00ffcc',
+              fontSize: '0.9em',
+              fontWeight: 'bold',
+              marginBottom: '5px',
+              textShadow: '0 0 3px #00ffcc'
+            }}>Date:</label>
+            <input
+              type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              style={{
+                width: '100%',
+                boxSizing: 'border-box'
+              }}
+            />
+          </div>
           {players.map((player, index) => (
             <div key={index} className="player-row-layout" style={{
               display: 'flex',
-              alignItems: 'flex-end',
-              gap: '15px',
+              flexDirection: window.innerWidth <= 480 ? 'column' : 'row',
+              alignItems: window.innerWidth <= 480 ? 'stretch' : 'flex-end',
+              gap: window.innerWidth <= 480 ? '10px' : '15px',
               marginBottom: '15px',
-              padding: '15px',
+              padding: window.innerWidth <= 480 ? '12px' : '15px',
               background: 'rgba(0, 0, 0, 0.2)',
               borderRadius: '8px',
               border: '1px solid rgba(0, 255, 204, 0.3)'
             }}>
-              <div style={{ display: 'flex', flexDirection: 'column', flex: 2, gap: '5px' }}>
+              <div style={{ 
+                display: 'flex', 
+                flexDirection: 'column', 
+                flex: window.innerWidth <= 480 ? 1 : 2, 
+                gap: '5px' 
+              }}>
                 <label htmlFor={`player-name-${index}`} style={{
                   color: '#00ffcc',
-                  fontSize: '0.9em',
+                  fontSize: window.innerWidth <= 480 ? '0.85em' : '0.9em',
                   fontWeight: 'bold',
                   marginBottom: '5px',
                   textShadow: '0 0 3px #00ffcc'
@@ -279,22 +327,27 @@ const ImageUpload: React.FC = () => {
                     backgroundColor: '#222',
                     color: '#00ffcc',
                     border: '2px solid #ff00ff',
-                    padding: '12px 15px',
-                    fontSize: '1em',
+                    padding: window.innerWidth <= 480 ? '10px 12px' : '12px 15px',
+                    fontSize: window.innerWidth <= 480 ? '0.9em' : '1em',
                     minHeight: '44px',
                     boxSizing: 'border-box',
                     fontFamily: "'Press Start 2P', cursive",
                     boxShadow: focusedInput === `name-${index}` ? '0 0 10px #ff00ff, 0 0 15px #ff00ff' : '0 0 5px #ff00ff',
                     transition: 'all 0.3s ease',
-                    width: 'auto',
+                    width: '100%',
                     outline: 'none'
                   }}
                 />
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', flex: 1, gap: '5px' }}>
+              <div style={{ 
+                display: 'flex', 
+                flexDirection: 'column', 
+                flex: 1, 
+                gap: '5px' 
+              }}>
                 <label htmlFor={`player-score-${index}`} style={{
                   color: '#00ffcc',
-                  fontSize: '0.9em',
+                  fontSize: window.innerWidth <= 480 ? '0.85em' : '0.9em',
                   fontWeight: 'bold',
                   marginBottom: '5px',
                   textShadow: '0 0 3px #00ffcc'
@@ -311,14 +364,14 @@ const ImageUpload: React.FC = () => {
                     backgroundColor: '#222',
                     color: '#00ffcc',
                     border: '2px solid #ff00ff',
-                    padding: '12px 15px',
-                    fontSize: '1em',
+                    padding: window.innerWidth <= 480 ? '10px 12px' : '12px 15px',
+                    fontSize: window.innerWidth <= 480 ? '0.9em' : '1em',
                     minHeight: '44px',
                     boxSizing: 'border-box',
                     fontFamily: "'Press Start 2P', cursive",
                     boxShadow: focusedInput === `score-${index}` ? '0 0 10px #ff00ff, 0 0 15px #ff00ff' : '0 0 5px #ff00ff',
                     transition: 'all 0.3s ease',
-                    width: 'auto',
+                    width: '100%',
                     outline: 'none'
                   }}
                 />

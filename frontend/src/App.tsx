@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-route
 import Login from './components/Login';
 import ManualEntry from './components/ManualEntry';
 import ImageUpload from './components/ImageUpload';
+import EditGame from './components/EditGame';
 import Metrics from './components/Metrics';
 import './App.css';
 
@@ -66,7 +67,7 @@ const MainMenu: React.FC = () => {
 
   return (
     <div className="main-menu">
-      <h1 className="spare-queen-title">Spare Queen</h1>
+      <h1 className="spare-queen-title">Spare<br />Queen</h1>
       <div className="menu-items">
         {menuItems.map((item, index) => (
           <div key={item.path} className="menu-item-container">
@@ -113,6 +114,7 @@ const App: React.FC = () => {
             <Route path="/" element={<MainMenu />} />
             <Route path="/manual-entry" element={<ManualEntry />} />
             <Route path="/image-upload" element={<ImageUpload />} />
+            <Route path="/edit-game" element={<EditGame />} />
             <Route path="/metrics" element={<Metrics />} />
           </Routes>
         ) : (
