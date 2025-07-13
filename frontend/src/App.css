@@ -1441,18 +1441,26 @@ p {
   box-shadow: 0 0 15px #ff6666;
 }
 
-/* Process Button Container */
-.process-button-container {
-  margin-bottom: 20px;
-}
-
-.image-preview {
+.image-preview-box {
   text-align: center;
   margin: 20px 0;
+  padding: 20px;
+  border: 2px solid rgba(255, 0, 255, 0.3);
+  border-radius: 12px;
+  background-color: rgba(0, 0, 0, 0.2);
 }
 
-.take-another-container {
-  margin-top: 20px;
+.take-another-btn {
+  background-color: #220044 !important;
+  color: #9944ff !important;
+  border-color: #9944ff !important;
+  box-shadow: 0 0 5px #9944ff !important;
+}
+
+.take-another-btn:hover {
+  background-color: #9944ff !important;
+  color: #000 !important;
+  box-shadow: 0 0 10px #9944ff !important;
 }
 
 @media (min-width: 769px) {
