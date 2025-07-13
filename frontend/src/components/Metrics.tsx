@@ -7,14 +7,18 @@ const Metrics: React.FC = () => {
   const navigate = useNavigate();
   const [metrics, setMetrics] = useState<any>(null);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchMetrics = async () => {
       try {
+        setLoading(true);
         const res = await axios.get('/api/metrics');
         setMetrics(res.data);
       } catch (err) {
         setError('Error fetching metrics');
+      } finally {
+        setLoading(false);
       }
     };
     fetchMetrics();
@@ -32,7 +36,14 @@ const Metrics: React.FC = () => {
         
         {error && <div className="error-message">{error}</div>}
         
-        {metrics && (
+        {loading && (
+          <div className="loading-container">
+            <div className="loading-spinner"></div>
+            <div className="loading-text">Preparing your scoreboard...</div>
+          </div>
+        )}
+        
+        {!loading && metrics && (
           <div className="metrics-content">
             <div className="total-games-section">
               <h3>Total Games Played</h3>
