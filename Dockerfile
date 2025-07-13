@@ -8,15 +8,23 @@ WORKDIR /usr/src/app
 RUN addgroup -g 1001 -S nodejs && \
     adduser -S appuser -u 1001 -G nodejs
 
-# Copy backend files and install dependencies
+# Build frontend first
+WORKDIR /tmp/frontend
+COPY frontend/package*.json ./
+RUN npm ci && npm cache clean --force
+COPY frontend/ ./
+RUN npm run build
+
+# Setup backend
+WORKDIR /usr/src/app
 COPY backend/package*.json ./
 RUN npm ci --only=production && npm cache clean --force
 
 # Copy backend source
 COPY backend/ ./
 
-# Copy pre-built frontend to public directory
-COPY frontend/build ./public
+# Copy built frontend to public directory
+COPY --from=0 /tmp/frontend/build ./public
 
 # Create uploads directory with proper permissions
 RUN mkdir -p uploads && chown -R appuser:nodejs uploads
